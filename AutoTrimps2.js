@@ -1,21 +1,22 @@
 // ==UserScript==
-// @name         AutoTrimpsV2+genBTC
-// @namespace    https://github.com/genbtc/AutoTrimps
-// @version      2.1.5.3-genbtc-1-10-2016+Modular
-// @description  try to take over the world!
-// @author       zininzinin, spindrjr, belaith, ishakaru, genBTC
-// @include      *trimps.github.io*
-// @include      *kongregate.com/games/GreenSatellite/trimps
+// @name         AutoTrimps-FirenX
+// @namespace    https://github.com/FirenX/AutoTrimps
+// @version      3.0.0.0-FirenX-08-21-2017
+// @description  Automate all the trimps!
+// @author       zininzinin, spindrjr, Ishkaru, genBTC, FirenX
+// @include        *trimps.github.io*
+// @include        *kongregate.com/games/GreenSatellite/trimps
 // @grant        none
 // ==/UserScript==
-var ATversion = '2.1.5.3-genbtc-1-10-2016+Modular';
+
+var ATversion = '3.0.0.0-FirenX-08-21-2017';
 
 ////////////////////////////////////////////////////////////////////////////////
 //Main Loader Initialize Function (loads first, load everything else)///////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////
 var atscript = document.getElementById('AutoTrimps-script')
-  , base = 'https://genbtc.github.io/AutoTrimps/'
+  , base = 'https://FirenX.github.io/AutoTrimps/'
   , module = 'modules/'
   ;
 if (atscript !== null) {
@@ -50,8 +51,8 @@ function printChangelog() {
 <br> AutoStance support for Plague/Bogged Daily\
 <br> Update Map Sliders decisions - less loot% reduction\
 <br><u>Report any bugs/problems please!</u>\
-<br><a href="https://github.com/genbtc/AutoTrimps#current-feature-changes-by-genbtc" target="#">Read the 12/20 Changelog Here</a>\
-<br><a href="https://github.com/genbtc/AutoTrimps/commits/gh-pages" target="#">Check the commit history</a> (if you care)\
+<br><a href="https://github.com/FirenX/AutoTrimps#current-feature-changes-by-genbtc" target="#">Read the 12/20 Changelog Here</a>\
+<br><a href="https://github.com/FirenX/AutoTrimps/commits/gh-pages" target="#">Check the commit history</a> (if you care)\
 ', 'cancelTooltip()', 'Script Update Notice ' + ATversion);
 }
 ////////////////////////////////////////

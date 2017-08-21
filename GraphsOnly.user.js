@@ -1,14 +1,15 @@
 // ==UserScript==
-// @name         AutoTrimpsV2+genBTC-GraphsOnly
-// @namespace    https://github.com/genbtc/AutoTrimps
-// @version      2.1.5.2-genbtc-12-23-2016+Modular
-// @description  Graphs Module (only) from AutoTrimps
-// @author       zininzinin, spindrjr, belaith, ishakaru, genBTC
-// @include      *trimps.github.io*
-// @include      *kongregate.com/games/GreenSatellite/trimps
+// @name         AutoTrimps-FirenX
+// @namespace    https://github.com/FirenX/AutoTrimps
+// @version      3.0.0.0-FirenX-08-21-2017
+// @description  Automate all the trimps!
+// @author       zininzinin, spindrjr, Ishkaru, genBTC, FirenX
+// @include        *trimps.github.io*
+// @include        *kongregate.com/games/GreenSatellite/trimps
 // @grant        none
 // ==/UserScript==
+
 var script = document.createElement('script');
 script.id = 'AutoTrimps-script';
-script.src = 'https://genbtc.github.io/AutoTrimps/Graphs.js';
+script.src = 'https://FirenX.github.io/AutoTrimps/Graphs.js';
 document.head.appendChild(script);

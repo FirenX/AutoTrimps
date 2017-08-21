@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AutoTrimps-genBTC
+// @name         AutoTrimps-FirenX
 // @namespace    https://github.com/FirenX/AutoTrimps
-// @version      2.1.5.2-genbtc-12-23-2016+Modular
+// @version      3.0.0.0-FirenX-08-21-2017
 // @description  Automate all the trimps!
 // @author       zininzinin, spindrjr, Ishkaru, genBTC, FirenX
 // @include        *trimps.github.io*

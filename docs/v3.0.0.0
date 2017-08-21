@@ -1,3 +1,7 @@
+v3.0.0.0 - 08/21/2017
+Added autodimgen, userscript and functionchanges modules.
+Changed url to FirenX.github.io where necessary.
+
 v2.1.5.1 - 12/23/2016
 AutoTrimps2.js:
 internals: fix module load order bug
