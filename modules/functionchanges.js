@@ -4,7 +4,6 @@ MODULES["automaps"].numHitsSurvived = 10;
 MODULES["automaps"].watchChallengeMaps = [16, 26, 36, 51];
 MODULES["jobs"].autoRatio4 = [1, 2, 9];
 MODULES["jobs"].autoRatio6 = [1, 2, 40];
-upgradeList = ['Miners', 'Scientists', 'Coordination', 'Speedminer', 'Speedlumber', 'Speedfarming', 'Speedscience', 'Megaminer', 'Megalumber', 'Megafarming', 'Megascience', 'Efficiency', 'TrainTacular', 'Trainers', 'Blockmaster', 'Battle', 'Bloodlust', 'Bounty', 'Egg', 'Anger', 'Formations', 'Dominance', 'Barrier', 'UberHut', 'UberHouse', 'UberMansion', 'UberHotel', 'UberResort', 'Trapstorm', 'Gigastation', 'Shieldblock', 'Potency', 'Magmamancers'];
 MODULES["autobreedtimer"].breedFireOn = 60; //turn breedfire on at X seconds (if BreedFire)
 MODULES["autobreedtimer"].breedFireOff = 35; //turn breedfire off at X seconds(if BreedFire)
 MODULES["buildings"].nurseSpireAmt = 400;
