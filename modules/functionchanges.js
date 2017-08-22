@@ -506,7 +506,6 @@ function autoMap() {
         var theMap = game.global.mapsOwnedArray[map];
         if (theMap.noRecycle && getPageSetting('RunUniqueMaps')) {
             if (theMap.name == 'The Wall' && game.upgrades.Bounty.allowed == 0 && !game.talents.bounty.purchased) {
-                (theMap.name == 'Trimple Of Doom' && (game.global.challengeActive == "Meditate" || game.global.challengeActive == "Trapper"))
                 var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
                 if (game.global.world < 15 + theMapDifficulty) continue;
                 selectedMap = theMap.id;
@@ -531,7 +530,7 @@ function autoMap() {
                 selectedMap = theMap.id;
                 break;
             }
-            if (theMap.name == 'Trimple Of Doom' && game.global.challengeActive == "Meditate") {
+            if (theMap.name == 'Trimple Of Doom' && (game.global.challengeActive == "Meditate" || game.global.challengeActive == "Trapper")) {
                 var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
                 if (game.global.world < 33 + theMapDifficulty) continue;
                 selectedMap = theMap.id;
