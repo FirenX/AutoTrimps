@@ -648,14 +648,15 @@ function setGraphData(graph) {
             title = 'Total Run Time';
             xTitle = 'Portal';
             yTitle = 'Time';
-            yType = 'datetime';
+            yType = 'Linear';
+/*             yType = 'datetime';
             formatter =  function () {
                 var ser = this.series;
                 return '<span style="color:' + ser.color + '" >●</span> ' +
                         ser.name + ': <b>' +
                         Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
 
-            };
+            }; */
             break;
 
         case 'Void Maps':
@@ -779,14 +780,15 @@ function setGraphData(graph) {
             title = '#2 Cumulative Time at END of zone# (new/experimental time tracking system that supports pauses. new data needs to accumulate)';
             xTitle = 'Zone';
             yTitle = 'Cumulative Clear Time';
-            yType = 'datetime';
+            yType = 'Linear';
+/*             yType = 'datetime';
             formatter =  function () {
                 var ser = this.series;
                 return '<span style="color:' + ser.color + '" >●</span> ' +
                         ser.name + ': <b>' +
                         Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
 
-            };
+            }; */
             break;
         case 'Cumulative Clear Time':
             graphData = allPurposeGraph('cumucleartime1',true,null,
@@ -796,14 +798,15 @@ function setGraphData(graph) {
             title = 'Cumulative Time at END of zone# (fixed, supports Pauses)';
             xTitle = 'Zone';
             yTitle = 'Cumulative Clear Time';
-            yType = 'datetime';
+            yType = 'Linear';
+/*             yType = 'datetime';
             formatter =  function () {
                 var ser = this.series;
                 return '<span style="color:' + ser.color + '" >●</span> ' +
                         ser.name + ': <b>' +
                         Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
 
-            };
+            }; */
             break;
         case 'HeliumPerHour':
             graphData = allPurposeGraph('heliumhr',true,null,
