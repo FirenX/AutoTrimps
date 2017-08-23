@@ -220,7 +220,7 @@ function mainLoop() {
 //GUI Updates happen on this thread, every 1000ms, concurrently
 function guiLoop() {
     updateCustomButtons();
-    setTimeup(guiLoop, runInterval*100);
+    setTimeout(guiLoop, runInterval*100);
 }
 
 // Userscript loader. write your own!
