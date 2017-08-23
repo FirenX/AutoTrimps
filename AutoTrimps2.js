@@ -60,7 +60,7 @@ function printChangelog() {
 ////////////////////////////////////////
 
 //Magic Numbers/////////////////////////
-var runInterval = 100;      //How often to loop through logic
+var runInterval = 10;      //How often to loop through logic
 var startupDelay = 2000;    //How long to wait for everything to load
 
 setTimeout(delayStart, startupDelay);
@@ -70,8 +70,8 @@ function delayStart() {
     setTimeout(delayStartAgain, startupDelay);
 }
 function delayStartAgain(){
-    setInterval(mainLoop, runInterval);
-    setInterval(guiLoop, runInterval*10);
+    setTimeout(mainLoop, runInterval);
+    setTimeup(guiLoop, runInterval*10);
     updateCustomButtons();
     document.getElementById('Prestige').value = autoTrimpSettings.PrestigeBackup.selected;
     //MODULESdefault = MODULES;
@@ -137,6 +137,7 @@ function mainCleanup() {
 ////////////////////////////////////////
 ////////////////////////////////////////
 function mainLoop() {
+    setTimeout(mainLoop, runInterval);
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
@@ -211,6 +212,7 @@ function mainLoop() {
 //GUI Updates happen on this thread, every 1000ms, concurrently
 function guiLoop() {
     updateCustomButtons();
+    setTimeup(guiLoop, runInterval*100);
 }
 
 // Userscript loader. write your own!

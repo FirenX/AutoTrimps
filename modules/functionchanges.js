@@ -1686,7 +1686,7 @@ function buyBuildings() {
         //buy nurseries irrelevant of warpstations (after we unlock them) - if we have enough extra gems that its not going to impact anything. note:(we will be limited by wood anyway - might use a lot of extra wood)
         var buyWithExtraGems = (!game.buildings.Warpstation.locked && nursCost * resomod < nwr * game.resources.gems.owned);
         //refactored the old calc, and added new buyWithExtraGems tacked on the front
-        if (((getPageSetting('MaxNursery') > game.buildings.Nursery.owned) || getPageSetting('MaxNursery') == -1) &&
+        if (((getPageSetting('MaxNursery') > game.buildings.Nursery.owned) || (getPageSetting('MaxNursery') == -1)) &&
             (buyWithExtraGems ||
                 ((nursCost < nwr * warpCost || game.buildings.Warpstation.locked) &&
                     (nursCost < nwr * collCost || game.buildings.Collector.locked || !game.buildings.Warpstation.locked)))) {
