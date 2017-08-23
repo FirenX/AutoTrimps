@@ -205,14 +205,14 @@ function mainLoop() {
     }
     
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
-    if (userscriptOn) userscripts();
+/*     if (userscriptOn) userscripts();
     var now = new Date().getTime();
     var diff = now - ATlastTick;
     ATlastTick = now;
     while (diff >= runInterval) {
         diff -= runInterval;
     }
-    setTimeout(mainLoop, (runInterval - diff) / 10);
+    setTimeout(mainLoop, (runInterval - diff) / 10); */
     //rinse, repeat
     return;
 }
