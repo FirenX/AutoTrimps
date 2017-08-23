@@ -60,8 +60,9 @@ function printChangelog() {
 ////////////////////////////////////////
 
 //Magic Numbers/////////////////////////
-var runInterval = 10;      //How often to loop through logic
+var runInterval = 100;      //How often to loop through logic
 var startupDelay = 2000;    //How long to wait for everything to load
+var ATlastTick;
 
 setTimeout(delayStart, startupDelay);
 function delayStart() {
@@ -70,6 +71,7 @@ function delayStart() {
     setTimeout(delayStartAgain, startupDelay);
 }
 function delayStartAgain(){
+    ATlastTick = new Date().getTime();
     setTimeout(mainLoop, runInterval);
     setTimeup(guiLoop, runInterval*10);
     updateCustomButtons();
@@ -137,7 +139,6 @@ function mainCleanup() {
 ////////////////////////////////////////
 ////////////////////////////////////////
 function mainLoop() {
-    setTimeout(mainLoop, runInterval);
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
@@ -205,6 +206,13 @@ function mainLoop() {
     
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
     if (userscriptOn) userscripts();
+    var now = new Date().getTime();
+    var diff = now - ATlastTick;
+    ATlastTick = now;
+    while (diff >= runInterval) {
+        diff -= runInterval;
+    }
+    setTimeout(mainLoop, (runInterval - diff) / 10);
     //rinse, repeat
     return;
 }
