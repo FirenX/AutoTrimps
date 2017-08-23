@@ -1,13 +1,13 @@
-MODULES["automaps"].enoughDamageCutoff = 4; //above this the game will do maps for map bonus stacks
-MODULES["automaps"].farmingCutoff = 100; //above this the game will farm.
+MODULES["automaps"].enoughDamageCutoff = 30; //above this the game will do maps for map bonus stacks
+MODULES["automaps"].farmingCutoff = 60; //above this the game will farm.
 MODULES["automaps"].numHitsSurvived = 10;
 MODULES["automaps"].watchChallengeMaps = [16, 26, 36, 51];
 MODULES["jobs"].autoRatio4 = [1, 2, 9];
 MODULES["jobs"].autoRatio6 = [1, 2, 40];
 MODULES["autobreedtimer"].breedFireOn = 60; //turn breedfire on at X seconds (if BreedFire)
 MODULES["autobreedtimer"].breedFireOff = 35; //turn breedfire off at X seconds(if BreedFire)
-MODULES["buildings"].nurseSpireAmt = 400;
-MODULES["buildings"].nurseVoidMapsAmt = 400;
+MODULES["buildings"].nurseSpireAmt = 0;
+MODULES["buildings"].nurseVoidMapsAmt = 0;
 
 
 function workerRatios() {
@@ -1658,7 +1658,7 @@ function buyBuildings() {
         minNursery = MODULES["buildings"].nurseSpireAmt;
     if (game.global.world == getPageSetting("VoidMaps"))
         minNursery = MODULES["buildings"].nurseVoidMapsAmt;
-    if (game.global.world >= getPageSetting('CustomAutoPortal') - 3)
+    if ((game.global.world >= getPageSetting('CustomAutoPortal') - 3) && (game.global.world > 200))
         minNursery = 200000;
     if (game.buildings.Nursery.owned < minNursery) {
         safeBuyBuilding('Nursery');

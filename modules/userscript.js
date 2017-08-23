@@ -10,6 +10,7 @@ globalvar4 = false;
 globalvar5 = [];
 globalvar6 = false;
 globalvar7 = false;
+globalvar8 = false;
 
 function userAutoAbandonChallengeToggle() {
     globalvar0 = !globalvar0;
@@ -74,7 +75,7 @@ function userSetVoidMaps() {
 
 function userscripts() {
     if (globalvar0) userAutoAbandonChallenge();
-    userSetCutoffs();
+    if (globalvar8) userSetCutoffs();
     if (globalvar6) userSetVoidMaps();
     if (globalvar7) autodimgen();
 }
