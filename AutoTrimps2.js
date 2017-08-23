@@ -142,7 +142,7 @@ function mainCleanup() {
 function mainLoop() {
     ATphase++;
     ATphase %= 10;
-if (phase == 0) {
+if (ATphase == 0) {
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
