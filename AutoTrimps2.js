@@ -111,6 +111,7 @@ var preBuyTooltip;
 var preBuymaxSplit;
 
 var ATrunning = true;
+var ATphase = 0;
 var magmiteSpenderChanged = false;
 var BAFsetting, oldBAFsetting;
 
@@ -139,6 +140,9 @@ function mainCleanup() {
 ////////////////////////////////////////
 ////////////////////////////////////////
 function mainLoop() {
+    ATphase++;
+    ATphase %= 10;
+if (phase == 0) {
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
@@ -180,6 +184,7 @@ function mainLoop() {
     if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
     if (getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
     autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
+}
 
     if (getPageSetting('UseScryerStance'))  useScryerStance();  //"Use Scryer Stance"   (scryer.js)
     else if (getPageSetting('AutoStance')<=1) autoStance();    //"Auto Stance"      (autostance.js)
