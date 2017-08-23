@@ -73,7 +73,7 @@ function delayStart() {
 function delayStartAgain(){
     ATlastTick = new Date().getTime();
     setTimeout(mainLoop, runInterval);
-    setTimeup(guiLoop, runInterval*10);
+    setTimeout(guiLoop, runInterval*10);
     updateCustomButtons();
     document.getElementById('Prestige').value = autoTrimpSettings.PrestigeBackup.selected;
     //MODULESdefault = MODULES;
