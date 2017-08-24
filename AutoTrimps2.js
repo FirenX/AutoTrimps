@@ -210,8 +210,8 @@ if (ATphase == 0) {
     }
     
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
-/*     if (userscriptOn) userscripts();
-    var now = new Date().getTime();
+    if (userscriptOn) userscripts();
+    /* var now = new Date().getTime();
     var diff = now - ATlastTick;
     ATlastTick = now;
     while (diff >= runInterval) {
