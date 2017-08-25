@@ -1,6 +1,7 @@
 MODULES["automaps"].enoughDamageCutoff = 30; //above this the game will do maps for map bonus stacks
 MODULES["automaps"].farmingCutoff = 60; //above this the game will farm.
 MODULES["automaps"].numHitsSurvived = 10;
+MODULES["automaps"].numHitsSurvivedScry = 80;
 MODULES["automaps"].watchChallengeMaps = [16, 26, 36, 51];
 MODULES["jobs"].autoRatio4 = [1, 2, 9];
 MODULES["jobs"].autoRatio6 = [1, 2, 40];
@@ -300,6 +301,13 @@ function autoMap() {
     //const FORMATION_MOD_2 = game.upgrades.Dominance.done ? 4 : 1;
     //asks if we can survive x number of hits in either D stance or X stance.
     enoughHealth = (baseHealth / FORMATION_MOD_1 > customVars.numHitsSurvived * (enemyDamage - baseBlock / FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock / FORMATION_MOD_1 : enemyDamage * pierceMod));
+    var min_zone = getPageSetting('ScryerMinZone');
+    var max_zone = getPageSetting('ScryerMaxZone');
+    var valid_min = game.global.world >= min_zone;
+    var valid_max = max_zone <= 0 || game.global.world < max_zone;
+    if (valid_min && valid_max) {
+        enoughHealth = (baseHealth / 2 > customVars.numHitsSurvivedScry * (enemyDamage - baseBlock / 2 > 0 ? enemyDamage - baseBlock / 2 : enemyDamage * pierceMod));
+    }
     enoughDamage = (ourBaseDamage * customVars.enoughDamageCutoff > enemyHealth);
     var enoughDamageNext = (game.global.mapBonus == 10) ? false : (ourBaseDamage / (mapbonusmulti) * (mapbonusmulti + 0.2) * customVars.enoughDamageCutoff > enemyHealth);
 

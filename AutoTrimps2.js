@@ -142,7 +142,6 @@ function mainCleanup() {
 function mainLoop() {
     ATphase++;
     ATphase %= 10;
-if (ATphase == 0) {
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
@@ -154,7 +153,7 @@ if (ATphase == 0) {
     game.global.autotrimps = {
         firstgiga: getPageSetting('FirstGigastation'),
         deltagiga: getPageSetting('DeltaGigastation')
-    }
+    };
     //auto-close breaking the world textbox
     if(document.getElementById('tipTitle').innerHTML == 'The Improbability') cancelTooltip();
     //auto-close the corruption at zone 181 textbox
@@ -165,25 +164,55 @@ if (ATphase == 0) {
     setScienceNeeded();  //determine how much science is needed
 
     //EXECUTE CORE LOGIC
-    if (getPageSetting('ExitSpireCell') >0) exitSpireCell(); //"Exit Spire After Cell" (other.js)
-    if (getPageSetting('WorkerRatios')) workerRatios(); //"Auto Worker Ratios"  (jobs.js)
-    if (getPageSetting('BuyUpgrades')) buyUpgrades();   //"Buy Upgrades"       (upgrades.js)
-    autoGoldenUpgrades();                               //"AutoGoldenUpgrades" (other.js)
-    if (getPageSetting('BuyStorage')) buyStorage();     //"Buy Storage"     (buildings.js)
-    if (getPageSetting('BuyBuildings')) buyBuildings(); //"Buy Buildings"   (buildings.js)
-    needGymystic = false;   //reset this after buyBuildings
-    if (getPageSetting('BuyJobs')) buyJobs();           //"Buy Jobs"    (jobs.js)
-    if (getPageSetting('ManualGather2')<=2) manualLabor();  //"Auto Gather/Build"           (gather.js)
-    else if (getPageSetting('ManualGather2')==3) manualLabor2();  //"Auto Gather/Build #2"     (")
-    if (getPageSetting('AutoMaps')) autoMap();          //"Auto Maps"   (automaps.js)
-    if (getPageSetting('GeneticistTimer') >= 0) autoBreedTimer(); //"Geneticist Timer" / "Auto Breed Timer"     (autobreedtimer.js)
-    if (autoTrimpSettings.AutoPortal.selected != "Off") autoPortal();   //"Auto Portal" (hidden until level 40) (portal.js)
-    if (getPageSetting('AutoHeirlooms2')) autoHeirlooms2(); //"Auto Heirlooms 2" (heirlooms.js)
-    else if (getPageSetting('AutoHeirlooms')) autoHeirlooms();//"Auto Heirlooms"      (")
-    if (getPageSetting('AutoUpgradeHeirlooms') && !heirloomsShown) autoNull();  //"Auto Upgrade Heirlooms" (heirlooms.js)    
-    if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
-    if (getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
-    autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
+    switch (ATphase) {
+    case 0:
+        if (getPageSetting('ExitSpireCell') >0) exitSpireCell(); //"Exit Spire After Cell" (other.js)
+        if (getPageSetting('WorkerRatios')) workerRatios(); //"Auto Worker Ratios"  (jobs.js)
+        break;
+    case 1:
+        if (getPageSetting('BuyUpgrades')) buyUpgrades();   //"Buy Upgrades"       (upgrades.js)
+        autoGoldenUpgrades();                               //"AutoGoldenUpgrades" (other.js)
+        break;
+    case 2:
+        if (getPageSetting('BuyStorage')) buyStorage();     //"Buy Storage"     (buildings.js)
+        if (getPageSetting('BuyBuildings')) buyBuildings(); //"Buy Buildings"   (buildings.js)
+        needGymystic = false;   //reset this after buyBuildings
+    break;
+    case 3:
+        if (getPageSetting('BuyJobs')) buyJobs();           //"Buy Jobs"    (jobs.js)
+        if (getPageSetting('ManualGather2')<=2) manualLabor();  //"Auto Gather/Build"           (gather.js)
+        else if (getPageSetting('ManualGather2')==3) manualLabor2();  //"Auto Gather/Build #2"     (")
+        break;
+    case 4:
+        if (getPageSetting('AutoMaps')) autoMap();          //"Auto Maps"   (automaps.js)
+        break;
+    case 5:
+        if (getPageSetting('GeneticistTimer') >= 0) autoBreedTimer(); //"Geneticist Timer" / "Auto Breed Timer"     (autobreedtimer.js)
+        break;
+    case 6:
+        if (autoTrimpSettings.AutoPortal.selected != "Off") autoPortal();   //"Auto Portal" (hidden until level 40) (portal.js)
+        break;
+    case 7:
+        if (getPageSetting('AutoHeirlooms2')) autoHeirlooms2(); //"Auto Heirlooms 2" (heirlooms.js)
+        else if (getPageSetting('AutoHeirlooms')) autoHeirlooms();//"Auto Heirlooms"      (")
+        break;
+    case 8:
+        if (getPageSetting('AutoUpgradeHeirlooms') && !heirloomsShown) autoNull();  //"Auto Upgrade Heirlooms" (heirlooms.js)    
+        if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
+        if (getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
+        break;
+    case 9:    
+        autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
+        if (getPageSetting('DynamicPrestige2')>0) prestigeChanging2(); //"Dynamic Prestige" (dynprestige.js)
+        else autoTrimpSettings.Prestige.selected = document.getElementById('Prestige').value; //if we dont want to, just make sure the UI setting and the internal setting are aligned.
+        //Auto Magmite Spender
+        try {
+         if (getPageSetting('AutoMagmiteSpender2')==2 && !magmiteSpenderChanged)
+             autoMagmiteSpender();       //(other.js)
+        } catch (err) {
+            debug("Error encountered in AutoMagmiteSpender(Always): " + err.message,"general");
+        }
+        break;
 }
 
     if (getPageSetting('UseScryerStance'))  useScryerStance();  //"Use Scryer Stance"   (scryer.js)
@@ -198,17 +227,6 @@ if (ATphase == 0) {
     else if (BAFsetting==0 && !game.global.autoBattle && game.global.soldierHealth == 0) betterAutoFight();   //use BAF as a backup for pre-Battle situations    
     oldBAFsetting = BAFsetting;                                            //enables built-in autofight once when disabled
 
-    if (getPageSetting('DynamicPrestige2')>0) prestigeChanging2(); //"Dynamic Prestige" (dynprestige.js)
-    else autoTrimpSettings.Prestige.selected = document.getElementById('Prestige').value; //if we dont want to, just make sure the UI setting and the internal setting are aligned.
-    
-    //Auto Magmite Spender
-    try {
-        if (getPageSetting('AutoMagmiteSpender2')==2 && !magmiteSpenderChanged)
-            autoMagmiteSpender();       //(other.js)
-    } catch (err) {
-        debug("Error encountered in AutoMagmiteSpender(Always): " + err.message,"general");
-    }
-    
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
     if (userscriptOn) userscripts();
     /* var now = new Date().getTime();
