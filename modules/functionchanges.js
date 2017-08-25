@@ -1533,7 +1533,7 @@ function autoStance2() {
         bDamage += bHealth * hplost;
     } else if (leadChallenge) {
         var leadDamage = game.challenges.Lead.stacks * 0.0003; //0.03% of their health per enemy stack.
-        var added = game.global.soldierHealth * leadDamage;
+        var added = game.global.soldierHealthMax * leadDamage;
         dDamage += added;
         xDamage += added;
         bDamage += added;
