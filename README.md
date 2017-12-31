@@ -20,10 +20,10 @@ took a break
 
 ***Option 1***: Install TamperMonkey (Chrome) or GreaseMonkey (Firefox)
 
-**EASY INSTALL click here: https://github.com/genbtc/AutoTrimps/raw/gh-pages/.user.js** (the Monkeys will detect this and prompt you to install it)
+**EASY INSTALL click here: https://github.com/FirenX/AutoTrimps/raw/gh-pages/.user.js** (the Monkeys will detect this and prompt you to install it)
 
 Overly detailed Chrome/TamperMonkey Instructions:
-- Open the TamperMonkey dashboard and go to utilities – in the URL box paste https://github.com/genbtc/AutoTrimps/raw/gh-pages/.user.js and click IMPORT
+- Open the TamperMonkey dashboard and go to utilities – in the URL box paste https://github.com/FirenX/AutoTrimps/raw/gh-pages/.user.js and click IMPORT
 - Alternatively, paste the contents of `.user.js` into a user script (pay attention, it says .user.js - this contains 4 lines of code that loads AutoTrimps2.js)
 - The script should automatically load everytime you go to https://trimps.github.io or the game on Kongregate
 - You will know you have the script loaded if you see the Automation and Graphs buttons in the game menu at the bottom
@@ -33,12 +33,12 @@ Overly detailed Chrome/TamperMonkey Instructions:
 
 FireFox/GreaseMonkey instructions:
 - GreaseMonkey identifies userscripts by visiting a URL that ends with ".user.js" in them:
-- Visit this URL, and Agree to install the userscript:  https://github.com/genbtc/AutoTrimps/raw/gh-pages/.user.js
+- Visit this URL, and Agree to install the userscript:  https://github.com/FirenX/AutoTrimps/raw/gh-pages/.user.js
 
 ***Option 2***: Via a Bookmark (does not work with Kongregate - maybe it does now that I added an include kongregate line to the file)
 - Create new bookmark and set its target to:
 ```js
-javascript:with(document)(head.appendChild(createElement('script')).src='https://genbtc.github.io/AutoTrimps/AutoTrimps2.js')._
+javascript:with(document)(head.appendChild(createElement('script')).src='https://FirenX.github.io/AutoTrimps/AutoTrimps2.js')._
 ```
 - This bookmark button has to be clicked manually after you go to https://trimps.github.io
 
@@ -62,30 +62,30 @@ The fact that it works at all is misleading new players into thinking its perfec
 
 ## Current feature changes by genBTC
 - Current as of :
-- *** 11/7/2017, v2.1.5.7 Merge DerSkagg PullRequest In*** 
+- *** 11/7/2017, v2.1.5.7 Merge DerSkagg PullRequest In***
 - New AutoGoldenUpgrades - After max void golden upgrades, alternate between buying helium and battle upgrades. Or Choose a Zone to switch over completely at.
-- *** 8/26/2017, v2.1.5.6 Merge Unihedro Branch In*** 
+- *** 8/26/2017, v2.1.5.6 Merge Unihedro Branch In***
 - Uni changes include: Dont buy Coords, Trimple Z#, Scryer Suicide Z#, Safety First, Forced Prestige Z#, Prefer Metal Maps, Nursery Count Pre-Spire, Finish Challenge2, DontCare/PowerSaving/DontRushVoids, Prestige Skip 2, Auto Eggs.
 - See his branch here @  https://github.com/Unihedro/AutoTrimps
-- Past Changes: 
+- Past Changes:
 - *** April Unihedro Branch Changes ***
 - 4/17 v2.1.5.5u3 - fix improvedautostorage hijack
 - Fixed a certain specific stupid bug caused by how graph overwrites some functions unnecessarily
 - 4/16 v2.1.5.5u2 - do more map stacks if not enoughHealth
 - No longer forces Buy Storage off
 - 4/15 v2.1.5.5u1 - new settings BuyOvclock
-- 4/14 v2.1.5.4u6 - Improved nurseries map and betterautostorage 
-- 4/14 v2.1.5.4u5 - Auto Eggs</b>, some more 4.3 support 
+- 4/14 v2.1.5.4u6 - Improved nurseries map and betterautostorage
+- 4/14 v2.1.5.4u5 - Auto Eggs</b>, some more 4.3 support
 - 4/12 v2.1.5.4u4 - AutoTrimps lifecycle changes
 - 4/11 v2.1.5.4u3 - fixed spire farming, autogen supply zone
-- 4/10 v2.1.5.4u2 - PrestigeSkip2 
+- 4/10 v2.1.5.4u2 - PrestigeSkip2
 - 4/09 v2.1.5.4u1 - Magma: AutoGen, AutoGen2
-- 4/08 v2.1.5.3u6 - ForcePresZ 
-- 4/07 + 4/06: 
-- U5: FinishC2, PowerSaving 
-- U4: PreferMetal, PreSpireNurseries 
-- U3: LinearZ, SupplyWall, OneTimeOnly 
-- U2: TrimpleZ, ScryerDieZ, IgnoreCrits 
+- 4/08 v2.1.5.3u6 - ForcePresZ
+- 4/07 + 4/06:
+- U5: FinishC2, PowerSaving
+- U4: PreferMetal, PreSpireNurseries
+- U3: LinearZ, SupplyWall, OneTimeOnly
+- U2: TrimpleZ, ScryerDieZ, IgnoreCrits
 - U1: Don't buy Coords / Skip challenge maps
 - ***1/10/2017***
 - new setting Buy Warp to Hit Coord (genbtc page)
@@ -100,7 +100,7 @@ The fact that it works at all is misleading new players into thinking its perfec
 - Skip prestige if >=2 unbought prestiges (maps settings)
 - Bug Fixes + redo geneticists buying again.
 - NEW: Add Map Bonus Graph
-- ***12/18*** 
+- ***12/18***
 - Fixed: dynamic prestige not reverting to dagger after the target zone is reached
 - Graphs - clear time, removed #2s, (essence graph might be messed up but its fixed now)
 - Change forceAbandonTrimps "sitting around breeding forever when not on full anti stacks" from 60 seconds to 31.
@@ -275,7 +275,7 @@ See changelog at the original version's github page: https://github.com/zininzin
 
 Since javascript is easily human readable, Much can be learned by reading the source code, starting with this knowledge:
 
-The script was faux-modularized on 12/4/2016, with the modules residing in the '/modules/' dir. This means that although the files are seperate, they are all still required for the script to run. In addition, the interoperability of the modules is still undocumented, and some(most) rely on other modules. Sometime in the future, you will be able to load/use different verisons of the various modules. 
+The script was faux-modularized on 12/4/2016, with the modules residing in the '/modules/' dir. This means that although the files are seperate, they are all still required for the script to run. In addition, the interoperability of the modules is still undocumented, and some(most) rely on other modules. Sometime in the future, you will be able to load/use different verisons of the various modules.
 AutoTrimps2.js is the main file that loads the modules, and then runs its mainLoop.
 
 The mainLoop() consists of the following subroutine functions, all of which are enable-able/disable-able by their buttons.:

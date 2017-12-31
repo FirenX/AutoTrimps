@@ -14,7 +14,7 @@ var ATversion = '2.1.6.0-genbtc-12-23-2017+Mod+Uni+coderpatsy';
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////
 var atscript = document.getElementById('AutoTrimps-script')
-  , base = 'https://genbtc.github.io/AutoTrimps/'
+  , base = 'https://FirenX.github.io/AutoTrimps/'
   , module = 'modules/'
   ;
 if (atscript !== null) {
