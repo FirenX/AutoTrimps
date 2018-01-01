@@ -74,7 +74,8 @@ function delayStart() {
     setTimeout(delayStartAgain, startupDelay);
 }
 function delayStartAgain(){
-    setInterval(mainLoop, runInterval);
+    //setInterval(mainLoop, runInterval);
+    setTimeout(integrateMainLoop, runInterval)
     setInterval(guiLoop, runInterval*10);
     updateCustomButtons();
     document.getElementById('Prestige').value = autoTrimpSettings.PrestigeBackup.selected;
@@ -113,6 +114,7 @@ var preBuyTooltip;
 var preBuymaxSplit;
 
 var ATrunning = true;
+var ATphase = 0;
 var magmiteSpenderChanged = false;
 var BAFsetting, oldBAFsetting;
 
@@ -144,6 +146,8 @@ function mainCleanup() {
 ////////////////////////////////////////
 ////////////////////////////////////////
 function mainLoop() {
+    ATphase++;
+    ATphase %= 10;
     if (ATrunning == false) return;
     ATrunning = true;
     if(game.options.menu.showFullBreed.enabled != 1) toggleSetting("showFullBreed");    //more detail
@@ -185,26 +189,48 @@ function mainLoop() {
     setScienceNeeded();  //determine how much science is needed
 
     //EXECUTE CORE LOGIC
-    if (getPageSetting('ExitSpireCell') >0) exitSpireCell(); //"Exit Spire After Cell" (other.js)
-    if (getPageSetting('WorkerRatios')) workerRatios(); //"Auto Worker Ratios"  (jobs.js)
-    if (getPageSetting('BuyUpgrades')) buyUpgrades();   //"Buy Upgrades"       (upgrades.js)
-    autoGoldenUpgradesAT();
-    if (getPageSetting('BuyStorage'))
+    switch (ATphase) {
+    case 0:
+        if (getPageSetting('ExitSpireCell') >0) exitSpireCell(); //"Exit Spire After Cell" (other.js)
+        if (getPageSetting('WorkerRatios')) workerRatios(); //"Auto Worker Ratios"  (jobs.js)
+        break;
+    case 1:
+        if (getPageSetting('BuyUpgrades')) buyUpgrades();   //"Buy Upgrades"       (upgrades.js)
+        autoGoldenUpgradesAT();
+        break;
+    case 2:
+        if (getPageSetting('BuyStorage'))
         buyStorage();     //"Buy Storage"     (buildings.js)
-    if (getPageSetting('BuyBuildings')) buyBuildings(); //"Buy Buildings"   (buildings.js)
-    needGymystic = false;   //reset this after buyBuildings
-    if (getPageSetting('BuyJobs')) buyJobs();           //"Buy Jobs"    (jobs.js)
-    if (getPageSetting('ManualGather2')<=2) manualLabor();  //"Auto Gather/Build"           (gather.js)
-    else if (getPageSetting('ManualGather2')==3) manualLabor2();  //"Auto Gather/Build #2"     (")
-    if (getPageSetting('AutoMaps')) autoMap();          //"Auto Maps"   (automaps.js)
-    else updateAutoMapsStatus();
-    if (getPageSetting('GeneticistTimer') >= 0) autoBreedTimer(); //"Geneticist Timer" / "Auto Breed Timer"     (autobreedtimer.js)
-    if (autoTrimpSettings.AutoPortal.selected != "Off") autoPortal();   //"Auto Portal" (hidden until level 40) (portal.js)
+        if (getPageSetting('BuyBuildings')) buyBuildings(); //"Buy Buildings"   (buildings.js)
+        needGymystic = false;   //reset this after buyBuildings
+        break;
+    case 3:
+        if (getPageSetting('BuyJobs')) buyJobs();           //"Buy Jobs"    (jobs.js)
+        if (getPageSetting('ManualGather2')<=2) manualLabor();  //"Auto Gather/Build"           (gather.js)
+        else if (getPageSetting('ManualGather2')==3) manualLabor2();  //"Auto Gather/Build #2"     (")
+        break;
+    case 4:
+        if (getPageSetting('AutoMaps')) autoMap();          //"Auto Maps"   (automaps.js)
+        else updateAutoMapsStatus();
+        break;
+    case 5:
+        if (getPageSetting('GeneticistTimer') >= 0) autoBreedTimer(); //"Geneticist Timer" / "Auto Breed Timer"     (autobreedtimer.js)
+        break;
+    case 6:
+        if (autoTrimpSettings.AutoPortal.selected != "Off") autoPortal();   //"Auto Portal" (hidden until level 40) (portal.js)
+        break;
+    case 7:
+        if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
+        if (aWholeNewWorld && getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
+        break;
+    case 8:
+        if (aWholeNewWorld && getPageSetting('FinishC2')>0 && game.global.runningChallengeSquared) finishChallengeSquared(); // "Finish Challenge2" (other.js)
+        break;
+    case 9:
+        autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
+        break;
+  }
 
-    if (getPageSetting('TrapTrimps') && game.global.trapBuildAllowed && game.global.trapBuildToggled == false) toggleAutoTrap(); //"Trap Trimps"
-    if (aWholeNewWorld && getPageSetting('AutoRoboTrimp')) autoRoboTrimp();   //"AutoRoboTrimp" (other.js)
-    if (aWholeNewWorld && getPageSetting('FinishC2')>0 && game.global.runningChallengeSquared) finishChallengeSquared(); // "Finish Challenge2" (other.js)
-    autoLevelEquipment();           //"Buy Armor", "Buy Armor Upgrades", "Buy Weapons", "Buy Weapons Upgrades"  (equipment.js)
 
     if (getPageSetting('UseScryerStance'))  useScryerStance();  //"Use Scryer Stance"   (scryer.js)
     else if (getPageSetting('AutoStance')<=1) autoStance();    //"Auto Stance"      (autostance.js)
@@ -241,6 +267,10 @@ function mainLoop() {
 //GUI Updates happen on this thread, every 1000ms, concurrently
 function guiLoop() {
     updateCustomButtons();
+}
+
+function integrateMainLoop() {
+    document.head.appendChild(document.createElement('script')).src = base + 'integration.js';
 }
 
 // Userscript loader. write your own!
