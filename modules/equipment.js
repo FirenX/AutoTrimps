@@ -237,9 +237,9 @@ function autoLevelEquipment() {
             Cost: 0
         };
     }
-    var enemyDamage = getEnemyMaxAttack(game.global.world + 1, 50, 'Snimp', 1.2);
+    var enemyDamage = getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.2);
     enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
-    var enemyHealth = getEnemyMaxHealth(game.global.world + 1);
+    var enemyHealth = getEnemyMaxHealth(game.global.world, 99);
     //Take Spire as a special case.
     var spirecheck = (isActiveSpireAT());
     if (spirecheck) {

@@ -25,7 +25,7 @@ MODULES["automaps"].watchChallengeMaps = [15, 25, 35, 50];  //during 'watch' cha
 MODULES["automaps"].shouldFarmCell = 59;
 MODULES["automaps"].SkipNumUnboughtPrestiges = 2;   //exceeding this number of unbought prestiges will trigger a skip of prestige mode.
 MODULES["automaps"].UnearnedPrestigesRequired = 2;
-MODULES["automaps"].maxMapBonusAfterZ = MODULES["automaps"].maxMapBonus;   //Max Map Bonus After Zone uses this many stacks 
+MODULES["automaps"].maxMapBonusAfterZ = MODULES["automaps"].maxMapBonus;   //Max Map Bonus After Zone uses this many stacks
                                                                  //- init as default value (10). user can set if they want.
 
 
@@ -136,12 +136,12 @@ function autoMap() {
     var enemyDamage;
     var enemyHealth;
     if (AutoStance<=1) {
-        enemyDamage = getEnemyMaxAttack(game.global.world + 1, 50, 'Snimp', 1.2);
+        enemyDamage = getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.2);
         enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
     } else {
-        enemyDamage = calcBadGuyDmg(null,getEnemyMaxAttack(game.global.world + 1, 50, 'Snimp', 1.0),true,true); //(enemy,attack,daily,maxormin,[disableFlucts])
+        enemyDamage = calcBadGuyDmg(null,getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.0),true,true); //(enemy,attack,daily,maxormin,[disableFlucts])
     }
-    enemyHealth = getEnemyMaxHealth(game.global.world + 1,50);
+    enemyHealth = getEnemyMaxHealth(game.global.world, 99);
     if(game.global.challengeActive == "Toxicity") {
         enemyHealth *= 2;
     }
@@ -328,7 +328,7 @@ function autoMap() {
     //Farm X Minutes Before Spire:
     var shouldDoSpireMaps = false;
     preSpireFarming = (isActiveSpireAT()) && (spireTime = (new Date().getTime() - game.global.zoneStarted) / 1000 / 60) < getPageSetting('MinutestoFarmBeforeSpire');
-    spireMapBonusFarming = getPageSetting('MaxStacksForSpire') && isActiveSpireAT() && game.global.mapBonus < customVars.maxMapBonus;    
+    spireMapBonusFarming = getPageSetting('MaxStacksForSpire') && isActiveSpireAT() && game.global.mapBonus < customVars.maxMapBonus;
     if (preSpireFarming || spireMapBonusFarming) {
         shouldDoMaps = true;
         shouldDoSpireMaps = true;
@@ -591,7 +591,7 @@ function autoMap() {
             if (shouldDoWatchMaps)
                 repeatClicked();
             //turn repeat off on the last WantHealth map.
-            if (shouldDoHealthMaps && game.global.mapBonus >= customVars.wantHealthMapBonus - 1) { 
+            if (shouldDoHealthMaps && game.global.mapBonus >= customVars.wantHealthMapBonus - 1) {
                 repeatClicked();
                 shouldDoHealthMaps = false;
             }
@@ -766,7 +766,7 @@ function updateAutoMapsStatus() {
         var secs = Math.floor(60 - (spireTime*60)%60).toFixed(0)
         var mins = Math.floor(minSp - spireTime).toFixed(0);
         var hours = minSp - (spireTime / 60).toFixed(2);
-        var spiretimeStr = (spireTime>=60) ? 
+        var spiretimeStr = (spireTime>=60) ?
             (hours + 'h') : (mins + 'm:' + (secs>=10 ? secs : ('0'+secs)) + 's');
         status.innerHTML = 'Farming for Spire ' + spiretimeStr + ' left';
     }
