@@ -52,9 +52,10 @@ function safeFireJob(job,amount) {
     if (amount != null)
         x = amount;
     if (!Number.isSafeInteger(oldjob)){
+        test-=x;
         while (oldjob == test) {
-            test-=x;
             x*=2;
+            test-=x;
         }
     }
     var old = preBuy2();
@@ -143,7 +144,6 @@ function buyJobs() {
         }
         //continue if we have >90% breedtimer:
     }
-    var subtract = 0;
     //used multiple times below: (good job javascript for allowing functions in functions)
     function checkFireandHire(job,amount) {
         freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
@@ -151,7 +151,7 @@ function buyJobs() {
             amount = 1;
         if (canAffordJob(job, false, amount) && !game.jobs[job].locked) {
             if (freeWorkers < amount)
-                subtract = safeFireJob('Farmer');
+                safeFireJob('Farmer');
             safeBuyJob(job, amount);
         }
     }
@@ -159,7 +159,7 @@ function buyJobs() {
     freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
     totalDistributableWorkers = freeWorkers + game.jobs.Farmer.owned + game.jobs.Miner.owned + game.jobs.Lumberjack.owned;
     if (getPageSetting('HireScientists') && !game.jobs.Scientist.locked && !breedFire) {
-        var buyScientists = Math.floor((scientistRatio / totalRatio) * totalDistributableWorkers) - game.jobs.Scientist.owned - subtract;
+        var buyScientists = Math.floor((scientistRatio / totalRatio) * totalDistributableWorkers) - game.jobs.Scientist.owned;
         if((buyScientists > 0 && freeWorkers > 0) && (getPageSetting('MaxScientists') > game.jobs.Scientist.owned || getPageSetting('MaxScientists') == -1))
             safeBuyJob('Scientist', buyScientists);
     }
@@ -189,7 +189,7 @@ function buyJobs() {
         if(!game.jobs[job].locked && !breedFire) {
             freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
             totalDistributableWorkers = freeWorkers + game.jobs.Farmer.owned + game.jobs.Miner.owned + game.jobs.Lumberjack.owned;
-            var toBuy = Math.floor((jobratio / totalRatio) * totalDistributableWorkers) - game.jobs[job].owned - subtract;
+            var toBuy = Math.floor((jobratio / totalRatio) * totalDistributableWorkers) - game.jobs[job].owned;
             var canBuy = Math.floor(game.resources.trimps.owned - game.resources.trimps.employed);
             var amount = toBuy <= canBuy ? toBuy : canBuy;
             safeBuyJob(job, amount);
@@ -205,6 +205,21 @@ function buyJobs() {
         safeBuyJob('Miner', game.jobs.Miner.owned * -1);
     if (!ratiobuy('Lumberjack', lumberjackRatio) && breedFire)
         safeBuyJob('Lumberjack', game.jobs.Lumberjack.owned * -1);
+
+    //Ensure Breeding
+    if ((game.resources.trimps.owned - game.resources.trimps.employed) < 2) {
+        if (game.jobs.Farmer.owned > 2)
+            safeFireJob('Farmer', 2);
+        else if (game.jobs.Lumberjack.owned > 2)
+            safeFireJob('Lumberjack', 2);
+        else if (game.jobs.Miner.owned > 2)
+            safeFireJob('Miner', 2);
+    }
+
+    //Ensure 100% Employment Ratio
+    freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
+    if (freeWorkers >= 1)
+        safeBuyJob('Farmer', freeWorkers);
 
     //Magmamancers code:
     if (game.jobs.Magmamancer.locked) return;
@@ -242,15 +257,6 @@ function buyJobs() {
     }
     else if (stacks2 < tierMagmamancers) {
         tierMagmamancers = 0;
-    }
-
-    if ((game.resources.trimps.owned - game.resources.trimps.employed) < 2) {
-        if (game.jobs.Farmer.owned > 2)
-            safeFireJob('Farmer', 2);
-        else if (game.jobs.Lumberjack.owned > 2)
-            safeFireJob('Lumberjack', 2);
-        else if (game.jobs.Miner.owned > 2)
-            safeFireJob('Miner', 2);
     }
 }
 var tierMagmamancers = 0;
