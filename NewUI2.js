@@ -95,6 +95,7 @@ function initializeAllTabs() {
     createTabs("Settings", "Sub Controls for the script");
     createTabs("genBTC", "GenBTC Advanced");
     createTabs("Uni", "Uni's mods");
+    createTabs("FirenX", "FirenX' mods")
     createTabs("Scryer", "Scryer Stance");
     createTabs("Magma", "Dimensional Generator");
     createTabs("Golden", "Golden Upgrade Strategies");
@@ -252,6 +253,8 @@ function initializeAllSettings() {
     createSetting('PrestigeSkip2', 'Prestige Skip 2', 'If there are 2 or fewer <b>Unobtained Weapon Prestiges in maps</b>, ie: there are less than 2 types to run for, AutoMaps will not enter Prestige Mode, and/or will exit from it. For users who tends to not need the last few prestiges due to resource gain not keeping up. The amount of unboughts can be configured with MODULES.automaps.UnearnedPrestigesRequired. If PrestigeSkipMode is enabled, both conditions need to be reached before exiting.', 'boolean', false, null, 'Uni');
     if (game.worldUnlocks.easterEgg)
         createSetting('AutoEggs', 'AutoEggs', 'Click easter egg if it exists, upon entering a new zone. Warning: Quite overpowered. Please solemnly swear that you are up to no good.', 'boolean', false, null, 'Uni');
+// FirenX' mods
+    createSetting('SmartMaps', ['Smart Maps Off', 'Smart Damage', 'Smart Health', 'Smart Damage & Health'], 'Experimental Feature: Changes map behaviour in the following way: If a map takes longer than the time the next map bonus takes, do not try to increase map bonus. If we survive long enough to rebreed, do not try to get more health.', 'multitoggle', 0, null, 'FirenX');
 
 // Scryer settings
     createSetting('UseScryerStance', 'Use Scryer Stance', '<b>MASTER BUTTON</b> Stay in Scryer stance in z181 and above (Overrides Autostance). Falls back to regular Autostance when not in use (so leave that on). Get 2x resources or Dark Essence. <u>All other buttons have no effect if this one is off.</u>', 'boolean', true, null, 'Scryer');

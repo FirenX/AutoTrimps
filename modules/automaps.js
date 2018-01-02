@@ -202,6 +202,24 @@ function autoMap() {
     enoughHealth = (baseHealth/FORMATION_MOD_1 > customVars.numHitsSurvived * (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod));
     enoughDamage = (ourBaseDamage * customVars.enoughDamageCutoff > enemyHealth);
 
+    //Smart Maps calculations
+    if (getPageSetting('SmartMaps') % 2 == 1) {
+        var timeToClearMap = getEnemyMaxHealth(game.global.world) * 1.1 * 26 / ourBaseDamage;
+        var preTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage);
+        var afterTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage * (mapbonusmulti + 0.2) / mapbonusmulti);
+        enoughDamage = enoughDamage || (preTimeToClearZone - afterTimeToClearZone < timeToClearMap);
+    }
+    if (getPageSetting('SmartMaps') >= 2) {
+        var num = (game.portal.Agility.level) ? 1000 * Math.pow(1 - game.portal.Agility.modifier, game.portal.Agility.level) : 1000;
+        if (game.talents.hyperspeed.purchased) num -= 100;
+        if (game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5)))
+        num -= 100;
+        else if (game.global.mapExtraBonus == "fa")
+        num -= 100;
+
+        var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
+        enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);        
+    }
     //remove this in the meantime until it works for everyone.
 /*     if (!wantToScry) {
         //enough health if we can survive 8 hits in D stance (health/2 and block/2)
