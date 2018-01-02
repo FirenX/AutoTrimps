@@ -663,13 +663,13 @@ function setGraphData(graph) {
             xTitle = 'Portal';
             yTitle = 'Time';
             yType = 'datetime';
-            formatter =  function () {
-                var ser = this.series;
-                return '<span style="color:' + ser.color + '" >●</span> ' +
-                        ser.name + ': <b>' +
-                        Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
-
-            };
+            // formatter =  function () {
+            //     var ser = this.series;
+            //     return '<span style="color:' + ser.color + '" >●</span> ' +
+            //             ser.name + ': <b>' +
+            //             Highcharts.dateFormat('%H:%M:%S', this.y) + '</b><br>';
+            //
+            // };
             break;
 
         case 'Void Maps':

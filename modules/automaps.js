@@ -496,7 +496,7 @@ function autoMap() {
             var ourHealth = baseHealth;
             if(game.global.challengeActive == 'Balance') {
                 var stacks = game.challenges.Balance.balanceStacks ? (game.challenges.Balance.balanceStacks > theMap.size) ? theMap.size : game.challenges.Balance.balanceStacks : false;
-                eAttack *= 2;
+                eAttack *= 2.35;
                 if(stacks) {
                     for (i = 0; i < stacks; i++ ) {
                         ourHealth *= 1.01;
