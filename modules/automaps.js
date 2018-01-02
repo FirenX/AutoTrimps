@@ -208,6 +208,7 @@ function autoMap() {
         var preTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage);
         var afterTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage * (mapbonusmulti + 0.2) / mapbonusmulti);
         enoughDamage = enoughDamage || (preTimeToClearZone - afterTimeToClearZone < timeToClearMap);
+        shouldFarm = shouldFarm && (preTimeToClearZone - afterTimeToClearZone >= timeToClearMap)
     }
     if (getPageSetting('SmartMaps') >= 2) {
         var num = (game.portal.Agility.level) ? 1000 * Math.pow(1 - game.portal.Agility.modifier, game.portal.Agility.level) : 1000;
@@ -218,7 +219,8 @@ function autoMap() {
         num -= 100;
 
         var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
-        enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);        
+        enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);
+        shouldFarm = ShouldFarm || (4 * baseHealth < game.global.gridArray[99].attack);        
     }
     //remove this in the meantime until it works for everyone.
 /*     if (!wantToScry) {
