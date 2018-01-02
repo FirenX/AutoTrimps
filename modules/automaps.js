@@ -220,7 +220,7 @@ function autoMap() {
 
         var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
         enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);
-        shouldFarm = shouldFarm || (4 * baseHealth < game.global.gridArray[99].attack);        
+        shouldFarm = shouldFarm || (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod));        
     }
     //remove this in the meantime until it works for everyone.
 /*     if (!wantToScry) {
