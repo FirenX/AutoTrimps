@@ -115,10 +115,12 @@ function buyJobs() {
         if (game.resources.trimps.owned < game.resources.trimps.realMax() * 0.9 && !breedFire){
             //so the game buys scientists first while we sit around waiting for breed timer.
             var buyScientists = Math.floor((scientistRatio / totalRatio * totalDistributableWorkers) - game.jobs.Scientist.owned);
+            if (getPageSetting('MaxScientists') > 1)
+                buyScientists = Math.max(buyScientists, getPageSetting('MaxScientists'));
             if (game.jobs.Scientist.owned < buyScientists && game.resources.trimps.owned > game.resources.trimps.realMax() * 0.1){
                 var toBuy = buyScientists-game.jobs.Scientist.owned;
                 var canBuy = Math.floor(game.resources.trimps.owned - game.resources.trimps.employed);
-                if((buyScientists > 0 && freeWorkers > 0) && (getPageSetting('MaxScientists') > game.jobs.Scientist.owned || getPageSetting('MaxScientists') == -1))
+                if (buyScientists > 0 && freeWorkers > 0)
                     safeBuyJob('Scientist', toBuy <= canBuy ? toBuy : canBuy);
             }
             else
