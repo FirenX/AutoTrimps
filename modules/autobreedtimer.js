@@ -19,7 +19,7 @@ function autoBreedTimer() {
         else if(game.global.challengeActive == 'Electricity' || game.global.challengeActive == 'Mapocalypse') setPageSetting('GeneticistTimer',3.5);
         else if(game.global.challengeActive == 'Nom' || game.global.challengeActive == 'Toxicity') {
 
-            if(getPageSetting('FarmWhenNomStacks7') && game.global.gridArray[99].nomStacks >= 5 && !game.global.mapsActive) {
+            if(getPageSetting('FarmWhenNomStacks7') && game.global.world > 1 && game.global.gridArray[99].nomStacks >= 5 && !game.global.mapsActive) {
                 //if Improbability already has 5 nomstacks, do 30 antistacks.
                 setPageSetting('GeneticistTimer',defaultBreedTimer);
             }
