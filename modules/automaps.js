@@ -210,7 +210,24 @@ function autoMap() {
     smartMapsFlags = 0;
     //Smart Maps calculations
     if (getPageSetting('SmartMaps') % 2 == 1) {
-        var timeToClearMap = getEnemyMaxHealth(game.global.world) * 1.1 * 26 / ourBaseDamage;
+        var siphlvl = game.global.world - game.portal.Siphonology.level;
+        var maxlvl = game.talents.mapLoot.purchased ? game.global.world - 1 : game.global.world;
+        if (getPageSetting('DynamicSiphonology') || shouldFarmLowerZone){
+            for (siphlvl; siphlvl < maxlvl; siphlvl++) {
+                //check HP vs damage and find how many siphonology levels we need.
+                var maphp = getEnemyMaxHealth(siphlvl) * 1.1;   // 1.1 mod is for all maps (taken out of the function)
+                var cpthlth = getCorruptScale("health")/2; //get corrupted health mod
+                if (mutations.Magma.active())
+                    maphp *= cpthlth;
+                var mapdmg = ourBaseDamage2 * (game.unlocks.imps.Titimp ? 2 :  1); // *2 for titimp. (ourBaseDamage2 has no mapbonus in it)
+                if (game.upgrades.Dominance.done && !getPageSetting('ScryerUseinMaps2'))
+                    mapdmg*=4;  //dominance stance and not-scryer stance in maps.
+                if (mapdmg < maphp){
+                    break;
+                }
+            }
+        }
+        var timeToClearMap = getEnemyMaxHealth(siphlvl) * 1.1 * 26 / ourBaseDamage;
         var preTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage);
         var afterTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage * (mapbonusmulti + 0.2) / mapbonusmulti);
         var timeWellSpent = (preTimeToClearZone - afterTimeToClearZone >= timeToClearMap);
