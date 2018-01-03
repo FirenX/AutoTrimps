@@ -36,6 +36,7 @@ var doVoids = false;
 var needToVoid = false;
 var needPrestige = false;
 var skippedPrestige = false;
+var smartMapsFlags = 0;
 var voidCheckPercent = 0;
 var HDratio = 0;
 var ourBaseDamage = 0;
@@ -208,18 +209,21 @@ function autoMap() {
         var timeToClearMap = getEnemyMaxHealth(game.global.world) * 1.1 * 26 / ourBaseDamage;
         var preTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage);
         var afterTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage * (mapbonusmulti + 0.2) / mapbonusmulti);
-        enoughDamage = enoughDamage || (preTimeToClearZone - afterTimeToClearZone < timeToClearMap);
-        shouldFarm = shouldFarm && (preTimeToClearZone - afterTimeToClearZone >= timeToClearMap)
+        var timeWellSpent = (preTimeToClearZone - afterTimeToClearZone >= timeToClearMap);
+        smartMapsFlags += (enoughDamage && timeWellSpent) ? 0 : 1;
+        smartMapsFlags += (shouldFarm && !timeWellSpent) ? 2 : 0;
+        enoughDamage = enoughDamage || !timeWellSpent;
+        shouldFarm = shouldFarm && timeWellSpent;
     }
     if (getPageSetting('SmartMaps') >= 2) {
         var num = (game.portal.Agility.level) ? 1000 * Math.pow(1 - game.portal.Agility.modifier, game.portal.Agility.level) : 1000;
         if (game.talents.hyperspeed.purchased) num -= 100;
         if (game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5)))
-        num -= 100;
-        else if (game.global.mapExtraBonus == "fa")
-        num -= 100;
+          num -= 100;
 
         var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
+        smartMapsFlags += (!enoughHealth && (getBreedTime(false) * 1000 < survivalTime)) ? 4 : 0;
+        smartMapsFlags += (!shouldFarm && (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod))) ? 8 : 0;
         enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);
         shouldFarm = shouldFarm || (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod));
     }
@@ -820,6 +824,8 @@ function updateAutoMapsStatus() {
 
     if (skippedPrestige) // Show skipping prestiges
       status.insertAdjacentHTML('afterbegin', '<b style="font-size:.8em;color:pink">Prestige Skipped</b><br>');
+    if (smartMapsFlags > 0) // Show skipping prestiges
+      status.insertAdjacentHTML('afterbegin', '<b style="font-size:.8em;color:pink">Smart Flag ' + smartMapsFlags + '</b><br>');
 
     //hider he/hr% status
     var area51 = document.getElementById('hiderStatus');
