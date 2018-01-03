@@ -15,7 +15,9 @@ function betterAutoFight() {
     var lowLevelFight = game.resources.trimps.maxSoldiers < breeding * 0.5 && breeding > game.resources.trimps.realMax() * 0.1 && game.global.world < 5;
     //Manually fight instead of using builtin auto-fight
     if (!game.global.fighting) {
-        if (newSquadRdy || game.global.soldierHealth > 0 || lowLevelFight || game.global.challengeActive == 'Watch') {
+        if (game.global.challengeActive == 'Life' && MODULES["automaps"].lifeChallengeHighAfter < game.global.world && (typeof getCurrentEnemy() == 'undefined' ? false : (getCurrentEnemy().mutation == 'Living' && game.challenges.Life.stacks < 100))){
+        }
+        else if (newSquadRdy || game.global.soldierHealth > 0 || lowLevelFight || game.global.challengeActive == 'Watch') {
             fightManual();
         }
         //Click Fight if we are dead and already have enough for our breed timer, and fighting would not add a significant amount of time
@@ -50,6 +52,8 @@ function betterAutoFight2() {
     if (!game.global.fighting) {
         if (game.global.soldierHealth > 0)
             battle(true); //just fight, dont speak.
+        else if (game.global.challengeActive == 'Life' && MODULES["automaps"].lifeChallengeHighAfter < game.global.world && (typeof getCurrentEnemy() == 'undefined' ? false : (getCurrentEnemy().mutation == 'Living' && game.challenges.Life.stacks < 100))){
+        }
         else if (newSquadRdy || lowLevelFight || game.global.challengeActive == 'Watch') {
             battle(true);
             debug("AutoFight Default: New squad ready", "other");
