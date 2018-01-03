@@ -36,7 +36,7 @@ function autoGoldenUpgradesAT() {
         var challSQ = game.global.runningChallengeSquared;
         var doDerskaggChallSQ = false;
         //If we have a lot of goldenUpgrades for the whole run, skip the 12% void to get to 60%
-        if (game.global.achievementBonus >= 1000 && setting == "Void" && game.goldenUpgrades.Void.currentBonus == 0.3 && game.global.goldenUpgrades == 5)
+        if (game.global.achievementBonus >= 1000 && setting == "Void" && game.goldenUpgrades.Void.currentBonus == 0.3 && game.global.goldenUpgrades == 5) {
             doDerskaggChallSQ = true;
         } else {
         //buy one upgrade per loop.
