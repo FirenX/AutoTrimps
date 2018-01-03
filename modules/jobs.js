@@ -181,7 +181,17 @@ function buyJobs() {
     }
     //Explorers:
     if (getPageSetting('MaxExplorers') > game.jobs.Explorer.owned || getPageSetting('MaxExplorers') == -1) {
-        checkFireandHire('Explorer');
+        // capped to tributes percentage.
+        var explorerpercent = getPageSetting('ExplorerCaptoTributes');
+        if (explorerpercent > 0 && !game.buildings.Tribute.locked) {
+            var curexplorercost = game.jobs.Explorer.cost.food[0]*Math.pow(game.jobs.Explorer.cost.food[1], game.jobs.Explorer.owned);
+            var curtributecost = getBuildingItemPrice(game.buildings.Tribute, "food", false, 1) * Math.pow(1 - game.portal.Resourceful.modifier, game.portal.Resourceful.level);
+            if (curexplorercost < curtributecost * (explorerpercent/100))
+                checkFireandHire('Explorer');
+        }
+        // regular
+        else
+            checkFireandHire('Explorer');
     }
 
     //Buy Farmers:
