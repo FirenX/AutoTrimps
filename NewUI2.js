@@ -989,6 +989,9 @@ function checkPortalSettings() {
         case "Electricity":
             portalLevel = 82;
             break;
+        case "Life":
+            portalLevel = 111;
+            break;
         case "Crushed":
             portalLevel = 126;
             break;

@@ -204,7 +204,7 @@ function autoMap() {
     const FORMATION_MOD_1 = game.upgrades.Dominance.done ? 2 : 1;
     //const FORMATION_MOD_2 = game.upgrades.Dominance.done ? 4 : 1;
     //asks if we can survive x number of hits in either D stance or X stance.
-    enoughHealth = (baseHealth/FORMATION_MOD_1 > customVars.numHitsSurvived * (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod));
+    enoughHealth = (baseHealth/FORMATION_MOD_1 > customVars.numHitsSurvived * Math.max(enemyDamage - baseBlock/FORMATION_MOD_1, enemyDamage * pierceMod));
     enoughDamage = (ourBaseDamage * customVars.enoughDamageCutoff > enemyHealth);
 
     smartMapsFlags = 0;
@@ -242,7 +242,7 @@ function autoMap() {
         if (game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5)))
           num -= 100;
 
-        var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
+        var survivalTime = num * (baseHealth / FORMATION_MOD_1) / Math.max(enemyDamage - baseBlock/FORMATION_MOD_1, enemyDamage * pierceMod)
         smartMapsFlags += (!enoughHealth && (getBreedTime(false) * 1000 < survivalTime)) ? 4 : 0;
         smartMapsFlags += (!shouldFarm && (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod))) ? 8 : 0;
         enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);
