@@ -31,11 +31,17 @@ function autoGoldenUpgradesAT() {
         if (setting == "Off") return;   //if disabled, exit.
         var num = getAvailableGoldenUpgrades();
         if (num == 0) return;       //if we have nothing to buy, exit.
-        //buy one upgrade per loop.
-        var success = buyGoldenUpgrade(setting);
+        var success = false;
         //Challenge^2 cant Get/Buy Helium, so adapt - do Derskagg mod.
-        var challSQ = game.global.runningChallengeSquared;        
+        var challSQ = game.global.runningChallengeSquared;
         var doDerskaggChallSQ = false;
+        //If we have a lot of goldenUpgrades for the whole run, skip the 12% void to get to 60%
+        if (game.global.achievementBonus >= 1000 && setting == "Void" && game.goldenUpgrades.Void.currentBonus == 0.3 && game.global.goldenUpgrades == 5)
+            doDerskaggChallSQ = true;
+        } else {
+        //buy one upgrade per loop.
+            success = buyGoldenUpgrade(setting);
+        }
         if (setting == "Helium" && challSQ && !success)
             doDerskaggChallSQ = true;
         // DZUGAVILI MOD - SMART VOID GUs
