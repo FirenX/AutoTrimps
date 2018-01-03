@@ -22,6 +22,7 @@ MODULES["automaps"].maxMapBonus = 10;       //cap how many maps are run during W
 MODULES["automaps"].wantHealthMapBonus = 10;//cap how many maps are run during Want More Health mode
 MODULES["automaps"].SpireFarm199Maps = true;   //this will farm spire on 199 maps instead of 200 maps when Map Reducer is bought
 MODULES["automaps"].watchChallengeMaps = [15, 25, 35, 50];  //during 'watch' challenge, run maps on these levels:
+MODULES["automaps"].lifeChallengeHighAfter = 50; //during 'Life' challenge, keep stacks high after that level
 MODULES["automaps"].shouldFarmCell = 59;
 MODULES["automaps"].SkipNumUnboughtPrestiges = 2;   //exceeding this number of unbought prestiges will trigger a skip of prestige mode.
 MODULES["automaps"].UnearnedPrestigesRequired = 2;
@@ -220,7 +221,7 @@ function autoMap() {
 
         var survivalTime = num * (baseHealth / FORMATION_MOD_1) / (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod)
         enoughHealth = enoughHealth || (getBreedTime(false) * 1000 < survivalTime);
-        shouldFarm = shouldFarm || (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod));        
+        shouldFarm = shouldFarm || (4 * baseHealth + baseBlock < game.global.gridArray[99].attack * (1 + pierceMod));
     }
     //remove this in the meantime until it works for everyone.
 /*     if (!wantToScry) {
@@ -345,6 +346,16 @@ function autoMap() {
         shouldDoMaps = true;
         shouldDoWatchMaps = true;
     }
+
+    //during 'Life' challenge, keep stacks high on these levels
+    if (game.global.challengeActive == 'Life' && customVars.lifeChallengeHighAfter < game.global.world){
+        if (game.challenges.Life.stacks < 100 && getCurrentEnemy().mutation == 'Living') {
+          mapsClicked();
+          if (game.global.switchToMaps)
+              mapsClicked();
+        }
+    }
+
     //Farm X Minutes Before Spire:
     var shouldDoSpireMaps = false;
     preSpireFarming = (isActiveSpireAT()) && (spireTime = (new Date().getTime() - game.global.zoneStarted) / 1000 / 60) < getPageSetting('MinutestoFarmBeforeSpire');

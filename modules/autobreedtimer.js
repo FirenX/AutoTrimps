@@ -26,6 +26,13 @@ function autoBreedTimer() {
             else
                 setPageSetting('GeneticistTimer',10);
         }
+        else if(game.global.challengeActive == 'Life') {
+            if (game.challenges.Life.stacks < 100) {
+                setPageSetting('GeneticistTimer',5);
+            } else if (game.challenges.Life.stacks > 120) {
+                setPageSetting('GeneticistTimer',30);
+            }
+        }
         else if (getPageSetting('SpireBreedTimer') > -1 && isActiveSpireAT())
             setPageSetting('GeneticistTimer',getPageSetting('SpireBreedTimer'));
         else setPageSetting('GeneticistTimer',defaultBreedTimer);
