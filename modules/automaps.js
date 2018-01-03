@@ -204,13 +204,14 @@ function autoMap() {
     enoughHealth = (baseHealth/FORMATION_MOD_1 > customVars.numHitsSurvived * (enemyDamage - baseBlock/FORMATION_MOD_1 > 0 ? enemyDamage - baseBlock/FORMATION_MOD_1 : enemyDamage * pierceMod));
     enoughDamage = (ourBaseDamage * customVars.enoughDamageCutoff > enemyHealth);
 
+    smartMapsFlags = 0;
     //Smart Maps calculations
     if (getPageSetting('SmartMaps') % 2 == 1) {
         var timeToClearMap = getEnemyMaxHealth(game.global.world) * 1.1 * 26 / ourBaseDamage;
         var preTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage);
         var afterTimeToClearZone = enemyHealth * (100 - game.global.lastClearedCell) / (ourBaseDamage * (mapbonusmulti + 0.2) / mapbonusmulti);
         var timeWellSpent = (preTimeToClearZone - afterTimeToClearZone >= timeToClearMap);
-        smartMapsFlags += (enoughDamage && timeWellSpent) ? 0 : 1;
+        smartMapsFlags += (!enoughDamage && !timeWellSpent) ? 1 : 0;
         smartMapsFlags += (shouldFarm && !timeWellSpent) ? 2 : 0;
         enoughDamage = enoughDamage || !timeWellSpent;
         shouldFarm = shouldFarm && timeWellSpent;
