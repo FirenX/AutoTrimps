@@ -349,7 +349,9 @@ function autoMap() {
 
     //during 'Life' challenge, keep stacks high on these levels
     if (game.global.challengeActive == 'Life' && customVars.lifeChallengeHighAfter < game.global.world){
-        if (game.challenges.Life.stacks < 100 && getCurrentEnemy().mutation == 'Living') {
+        var enemy = getCurrentEnemy();
+        if (typeof enemy === 'undefined') continue;
+        else if (game.challenges.Life.stacks < 100 && enemy.mutation == 'Living') {
           mapsClicked();
           if (game.global.switchToMaps)
               mapsClicked();
