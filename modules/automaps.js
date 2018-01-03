@@ -147,6 +147,9 @@ function autoMap() {
     if(game.global.challengeActive == "Toxicity") {
         enemyHealth *= 2;
     }
+    if(game.global.challengeActive == "Crushed") {
+        enemyDamage *= 5;
+    }
     //Corruption Zone Proportionality Farming Calculator:
     var corrupt = game.global.world >= mutations.Corruption.start(true);
     if (getPageSetting('CorruptionCalc') && corrupt) {

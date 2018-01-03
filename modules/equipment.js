@@ -253,6 +253,9 @@ function autoLevelEquipment() {
     }
 
     //below challenge multiplier not necessarily accurate, just fudge factors
+    if(game.global.challengeActive == "Crushed") {
+        enemyDamage *= 5;
+    }
     if(game.global.challengeActive == "Toxicity") {
         //ignore damage changes (which would effect how much health we try to buy) entirely since we die in 20 attacks anyway?
         if(game.global.world < 61)
