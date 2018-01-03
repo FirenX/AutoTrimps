@@ -137,6 +137,9 @@ function getBattleStats(what,form,crit) {
         var stackStr = Math.pow(0.995, game.challenges.Decay.stacks);
         currentCalc *= stackStr;
     }
+    if (game.global.challengeActive == "Life" && what == "health"){
+        currentCalc *= (1 + 0.1 * game.challenges.Life.stacks)
+    }
     if (game.global.challengeActive == "Daily"){
         var mult = 0;
         if (typeof game.global.dailyChallenge.weakness !== 'undefined' && what == "attack"){
@@ -206,6 +209,9 @@ function calcOurDmg(number,maxormin,disableStances,disableFlucts) { //number = b
     }
     else if (game.portal.Range.level > 0){
         minFluct = fluctuation - (.02 * game.portal.Range.level);
+    }
+    if (game.global.challengeActive == "Life"){
+        number *= (1 + 0.1 * game.challenges.Life.stacks)
     }
     if (game.global.challengeActive == "Decay"){
         number *= 5;
