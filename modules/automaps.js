@@ -545,6 +545,8 @@ function autoMap() {
                 }
             }
             if(game.global.challengeActive == 'Toxicity') eAttack *= 5;
+            if(game.global.challengeActive == 'Crushed') eAttack *= 5;
+
             //break to prevent finishing map to finish a challenge?
             //continue to check for doable map?
             var diff = parseInt(getPageSetting('VoidCheck')) > 0 ? parseInt(getPageSetting('VoidCheck')) : 2;
