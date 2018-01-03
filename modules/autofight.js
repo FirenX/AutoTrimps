@@ -16,6 +16,7 @@ function betterAutoFight() {
     //Manually fight instead of using builtin auto-fight
     if (!game.global.fighting) {
         if (game.global.challengeActive == 'Life' && MODULES["automaps"].lifeChallengeHighAfter < game.global.world && (typeof getCurrentEnemy() == 'undefined' ? false : (getCurrentEnemy().mutation == 'Living' && game.challenges.Life.stacks < 100))){
+            if (Math.random() * 10 < 1) fightManual();
         }
         else if (newSquadRdy || game.global.soldierHealth > 0 || lowLevelFight || game.global.challengeActive == 'Watch') {
             fightManual();
@@ -53,6 +54,7 @@ function betterAutoFight2() {
         if (game.global.soldierHealth > 0)
             battle(true); //just fight, dont speak.
         else if (game.global.challengeActive == 'Life' && MODULES["automaps"].lifeChallengeHighAfter < game.global.world && (typeof getCurrentEnemy() == 'undefined' ? false : (getCurrentEnemy().mutation == 'Living' && game.challenges.Life.stacks < 100))){
+            if (Math.random() * 10 < 1) battle(true);
         }
         else if (newSquadRdy || lowLevelFight || game.global.challengeActive == 'Watch') {
             battle(true);
