@@ -789,7 +789,7 @@ function autoMap() {
             if (game.global.highestLevelCleared > 60) {
                 document.getElementById('advSpecialSelect').value = "0";
                 //List with Special Bonuses in order of importance and mapped to usefulness conditions
-                var specialMapBonusList = {"p":needPrestige, "fa":!(game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1), "lmc":true, "hc":true, "smc":true, "lc":true};
+                var specialMapBonusList = {"p":needPrestige, "fa":!(game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5))), "lmc":true, "hc":true, "smc":true, "lc":true};
                 for (var x in specialMapBonusList) {
                   if (game.global.highestLevelCleared > mapSpecialModifierConfig[x].unlocksAt && document.getElementById('advSpecialSelect').value == "0" && specialMapBonusList.x) {
                       document.getElementById('advSpecialSelect').value = x;
