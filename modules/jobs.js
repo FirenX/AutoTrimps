@@ -108,11 +108,23 @@ function buyJobs() {
     } else if (getPageSetting('HireScientists') && game.jobs.Scientist.owned < 10 && scienceNeeded > 100 && freeWorkers > 0 && game.jobs.Farmer.owned >= 10) {
         safeBuyJob('Scientist', 1);
     }
+
+    //Ensure Breeding
+    if ((game.resources.trimps.owned - game.resources.trimps.employed) < 2) {
+        if (game.jobs.Farmer.owned > 2)
+            safeFireJob('Farmer', 2);
+        else if (game.jobs.Lumberjack.owned > 2)
+            safeFireJob('Lumberjack', 2);
+        else if (game.jobs.Miner.owned > 2)
+            safeFireJob('Miner', 2);
+        return;
+    }
+
     freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
     totalDistributableWorkers = freeWorkers + game.jobs.Farmer.owned + game.jobs.Miner.owned + game.jobs.Lumberjack.owned;
     if (game.global.challengeActive == 'Watch'){
         scientistRatio = totalRatio / MODULES["jobs"].scientistRatio2;
-        if (game.resources.trimps.owned < game.resources.trimps.realMax() * 0.9 && !breedFire){
+        if (game.resources.trimps.owned > game.resources.trimps.realMax() * 0.9 && !breedFire){
             //so the game buys scientists first while we sit around waiting for breed timer.
             var buyScientists = Math.floor(scientistRatio / totalRatio * (totalDistributableWorkers + game.jobs.Scientist.owned));
             if (getPageSetting('MaxScientists') > 1)
@@ -123,29 +135,26 @@ function buyJobs() {
                 if (buyScientists > 0 && freeWorkers > 0)
                     safeBuyJob('Scientist', toBuy <= canBuy ? toBuy : canBuy);
             }
-            else
-                return;
         }
     }
-    else
-    {   //exit if we are havent bred to at least 90% breedtimer yet...
-        var breeding = (game.resources.trimps.owned - game.resources.trimps.employed);
-        if (!(game.global.challengeActive == "Trapper") && game.resources.trimps.owned < game.resources.trimps.realMax() * 0.9 && !breedFire) {
-            if (breeding > game.resources.trimps.realMax() * 0.33) {
-                freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
-                //only hire if we have less than 300k trimps (dont spam up the late game with meaningless 1's)
-                if (freeWorkers > 0 && game.resources.trimps.realMax() <= 3e5) {
-                    //do Something tiny, so earlygame isnt stuck on 0 (down to 33% trimps. stops getting stuck from too low.)
-                    safeBuyJob('Miner', 1);
-                    safeBuyJob('Farmer', 1);
-                    safeBuyJob('Lumberjack', 1);
-                }
+    //exit if we are havent bred to at least 90% breedtimer yet...
+    var breeding = (game.resources.trimps.owned - game.resources.trimps.employed);
+    if (!(game.global.challengeActive == "Trapper") && game.resources.trimps.owned > game.resources.trimps.realMax() * 0.9 && !breedFire) {
+        if (breeding > game.resources.trimps.realMax() * 0.33) {
+            freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
+            //only hire if we have less than 300k trimps (dont spam up the late game with meaningless 1's)
+            if (freeWorkers > 0 && game.resources.trimps.realMax() <= 3e5) {
+                //do Something tiny, so earlygame isnt stuck on 0 (down to 33% trimps. stops getting stuck from too low.)
+                safeBuyJob('Miner', 1);
+                safeBuyJob('Farmer', 1);
+                safeBuyJob('Lumberjack', 1);
             }
-            //standard quit routine if <90% breed:
-            return;
         }
-        //continue if we have >90% breedtimer:
+    } else  {
+        //standard quit routine if <90% breed:
+        return;
     }
+    //continue if we have >90% breedtimer:
     //used multiple times below: (good job javascript for allowing functions in functions)
     function checkFireandHire(job,amount) {
         freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
@@ -229,15 +238,6 @@ function buyJobs() {
     if (freeWorkers >= 1 && !breedFire)
         safeBuyJob('Farmer', freeWorkers);
 
-    //Ensure Breeding
-    if ((game.resources.trimps.owned - game.resources.trimps.employed) < 2) {
-        if (game.jobs.Farmer.owned > 2)
-            safeFireJob('Farmer', 2);
-        else if (game.jobs.Lumberjack.owned > 2)
-            safeFireJob('Lumberjack', 2);
-        else if (game.jobs.Miner.owned > 2)
-            safeFireJob('Miner', 2);
-    }
 
 
     //Magmamancers code:
