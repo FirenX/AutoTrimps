@@ -114,9 +114,9 @@ function buyJobs() {
         scientistRatio = totalRatio / MODULES["jobs"].scientistRatio2;
         if (game.resources.trimps.owned < game.resources.trimps.realMax() * 0.9 && !breedFire){
             //so the game buys scientists first while we sit around waiting for breed timer.
-            var buyScientists = Math.floor((scientistRatio / totalRatio * totalDistributableWorkers) - game.jobs.Scientist.owned);
+            var buyScientists = Math.floor(scientistRatio / totalRatio * (totalDistributableWorkers + game.jobs.Scientist.owned));
             if (getPageSetting('MaxScientists') > 1)
-                buyScientists = Math.max(buyScientists, getPageSetting('MaxScientists'));
+                buyScientists = Math.min(buyScientists, getPageSetting('MaxScientists'));
             if (game.jobs.Scientist.owned < buyScientists && game.resources.trimps.owned > (game.resources.trimps.realMax() * 0.1) && (getPageSetting('MaxScientists') > game.jobs.Scientist.owned || getPageSetting('MaxScientists') == -1)) {
                 var toBuy = buyScientists-game.jobs.Scientist.owned;
                 var canBuy = Math.floor(game.resources.trimps.owned - game.resources.trimps.employed);
@@ -161,11 +161,15 @@ function buyJobs() {
     freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
     totalDistributableWorkers = freeWorkers + game.jobs.Farmer.owned + game.jobs.Miner.owned + game.jobs.Lumberjack.owned;
     if (getPageSetting('HireScientists') && !game.jobs.Scientist.locked && !breedFire) {
-        var buyScientists = Math.floor((scientistRatio / totalRatio) * totalDistributableWorkers) - game.jobs.Scientist.owned;
+        var buyScientists = Math.floor((scientistRatio / totalRatio) * (totalDistributableWorkers + game.jobs.Scientist.owned));
         if (getPageSetting('MaxScientists') > 1)
-            buyScientists = Math.max(buyScientists, getPageSetting('MaxScientists'));
-        if((buyScientists > 0 && freeWorkers > 0) && (getPageSetting('MaxScientists') > game.jobs.Scientist.owned || getPageSetting('MaxScientists') == -1))
-            safeBuyJob('Scientist', buyScientists);
+            buyScientists = Math.min(buyScientists, getPageSetting('MaxScientists'));
+        if (game.jobs.Scientist.owned < buyScientists && game.resources.trimps.owned > (game.resources.trimps.realMax() * 0.1) && (getPageSetting('MaxScientists') > game.jobs.Scientist.owned || getPageSetting('MaxScientists') == -1)) {
+            var toBuy = buyScientists-game.jobs.Scientist.owned;
+            var canBuy = Math.floor(game.resources.trimps.owned - game.resources.trimps.employed);
+            if (buyScientists > 0 && freeWorkers > 0)
+                safeBuyJob('Scientist', toBuy <= canBuy ? toBuy : canBuy);
+        }
     }
     //Trainers:
     if (getPageSetting('MaxTrainers') > game.jobs.Trainer.owned || getPageSetting('MaxTrainers') == -1) {
