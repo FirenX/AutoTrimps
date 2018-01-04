@@ -224,6 +224,11 @@ function buyJobs() {
     if (!ratiobuy('Lumberjack', lumberjackRatio) && breedFire)
         safeBuyJob('Lumberjack', game.jobs.Lumberjack.owned * -1);
 
+    //Ensure 100% Employment Ratio
+    freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
+    if (freeWorkers >= 1 && !breedFire)
+        safeBuyJob('Farmer', freeWorkers);
+
     //Ensure Breeding
     if ((game.resources.trimps.owned - game.resources.trimps.employed) < 2) {
         if (game.jobs.Farmer.owned > 2)
@@ -234,10 +239,6 @@ function buyJobs() {
             safeFireJob('Miner', 2);
     }
 
-    //Ensure 100% Employment Ratio
-    freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
-    if (freeWorkers >= 1 && !breedFire)
-        safeBuyJob('Farmer', freeWorkers);
 
     //Magmamancers code:
     if (game.jobs.Magmamancer.locked) return;
