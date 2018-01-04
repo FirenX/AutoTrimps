@@ -236,7 +236,7 @@ function buyJobs() {
 
     //Ensure 100% Employment Ratio
     freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
-    if (freeWorkers >= 1)
+    if (freeWorkers >= 1 && !breedFire)
         safeBuyJob('Farmer', freeWorkers);
 
     //Magmamancers code:
