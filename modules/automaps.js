@@ -784,7 +784,7 @@ function autoMap() {
                 sizeAdvMapsRange.value -= 1;
             }
 
-        //Use Perfect Slider if affordable
+        //Use Perfect Slider if possible
             if (checkSlidersForPerfect()) {
                 document.getElementById('advPerfectCheckbox').checked = true;
                 if (updateMapCost(true) < game.resources.fragments.owned) {
