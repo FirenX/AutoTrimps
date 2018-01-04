@@ -791,9 +791,9 @@ function autoMap() {
                 //List with Special Bonuses in order of importance and mapped to usefulness conditions
                 var specialMapBonusList = {"p":needPrestige, "fa":!(game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5))), "lmc":true, "hc":true, "smc":true, "lc":true};
                 for (var x in specialMapBonusList) {
-                  if (game.global.highestLevelCleared > mapSpecialModifierConfig[x].unlocksAt && document.getElementById('advSpecialSelect').value == "0" && specialMapBonusList.x) {
+                  if (game.global.highestLevelCleared > mapSpecialModifierConfig[x].unlocksAt && document.getElementById('advSpecialSelect').value == "0" && specialMapBonusList[x]) {
                       document.getElementById('advSpecialSelect').value = x;
-                      if (updateMapCost(true) > game.resources.fragments.owned) {
+                      if (updateMapCost(true) < game.resources.fragments.owned) {
                         break;
                       } else {
                         document.getElementById('advSpecialSelect').value = "0";
@@ -805,7 +805,7 @@ function autoMap() {
         //Use Perfect Slider if possible
             if (checkSlidersForPerfect()) {
                 document.getElementById('advPerfectCheckbox').checked = true;
-                if (updateMapCost(true) < game.resources.fragments.owned) {
+                if (updateMapCost(true) > game.resources.fragments.owned) {
                     document.getElementById('advPerfectCheckbox').checked = false;
                 }
             }
