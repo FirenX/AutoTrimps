@@ -137,7 +137,7 @@ function buyJobs() {
             }
         }
     }
-    //exit if we are havent bred to at least 90% breedtimer yet...
+    //exit if we have not bred to at least 90% yet...
     var breeding = (game.resources.trimps.owned - game.resources.trimps.employed);
     if (!(game.global.challengeActive == "Trapper") && game.resources.trimps.owned > game.resources.trimps.realMax() * 0.9 && !breedFire) {
         if (breeding > game.resources.trimps.realMax() * 0.33) {
@@ -150,11 +150,12 @@ function buyJobs() {
                 safeBuyJob('Lumberjack', 1);
             }
         }
+        else return;
     } else  {
-        //standard quit routine if <90% breed:
+        //standard quit routine if <90% population:
         return;
     }
-    //continue if we have >90% breedtimer:
+    //continue if we have >90% population:
     //used multiple times below: (good job javascript for allowing functions in functions)
     function checkFireandHire(job,amount) {
         freeWorkers = Math.ceil(game.resources.trimps.realMax() / 2) - game.resources.trimps.employed;
