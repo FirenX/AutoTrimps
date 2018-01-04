@@ -793,7 +793,11 @@ function autoMap() {
                 for (var x in specialMapBonusList) {
                   if (game.global.highestLevelCleared > mapSpecialModifierConfig[x].unlocksAt && document.getElementById('advSpecialSelect').value == "0" && specialMapBonusList.x) {
                       document.getElementById('advSpecialSelect').value = x;
-                      (updateMapCost(true) > game.resources.fragments.owned) ? break : document.getElementById('advSpecialSelect').value = "0";
+                      if (updateMapCost(true) > game.resources.fragments.owned) {
+                        break;
+                      } else {
+                        document.getElementById('advSpecialSelect').value = "0";
+                      }
                   }
                 }
             }
