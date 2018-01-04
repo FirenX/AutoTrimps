@@ -784,6 +784,14 @@ function autoMap() {
                 sizeAdvMapsRange.value -= 1;
             }
 
+        //Use Perfect Slider if affordable
+            if (checkSlidersForPerfect()) {
+                document.getElementById('advPerfectCheckbox').checked = true;
+                if (updateMapCost(true) < game.resources.fragments.owned) {
+                    document.getElementById('advPerfectCheckbox').checked = false;
+                }
+            }
+
         //if we can't afford the map we designed, pick our highest existing map
             var maplvlpicked = document.getElementById("mapLevelInput").value;
             if (updateMapCost(true) > game.resources.fragments.owned) {
