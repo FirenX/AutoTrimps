@@ -563,6 +563,7 @@ function autoMap() {
             }
             if(game.global.challengeActive == 'Toxicity') eAttack *= 5;
             if(game.global.challengeActive == 'Crushed') eAttack *= 5;
+            if(theMap.name.includes('Heinous')) eAttack *= 5;
 
             //break to prevent finishing map to finish a challenge?
             //continue to check for doable map?
@@ -782,6 +783,19 @@ function autoMap() {
             //if we still cant afford the map, lower the size slider (make it larger) (doesn't matter much for farming.)
             while (sizeAdvMapsRange.value > 0 && updateMapCost(true) > game.resources.fragments.owned) {
                 sizeAdvMapsRange.value -= 1;
+            }
+
+        //Use Special Map Bonuses if possible
+            if (game.global.highestLevelCleared > 60) {
+                document.getElementById('advSpecialSelect').value = "0";
+                var specialMapBonusList = {"p":needPrestige, "fa":!(game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1), "lmc":true, "hc":true, "smc":true, "lc":true};
+                for (var x in specialMapBonusList) {
+                  if (game.global.highestLevelCleared > mapSpecialModifierConfig[x].unlocksAt && document.getElementById('advSpecialSelect').value == "0" && specialMapBonusList.x) {
+                      document.getElementById('advSpecialSelect').value = x;
+                      (updateMapCost(true) > game.resources.fragments.owned) ? break : document.getElementById('advSpecialSelect').value = "0";
+                  }
+                }
+                document.getElementById('advSpecialSelect').value = specialMapBonus;
             }
 
         //Use Perfect Slider if possible
