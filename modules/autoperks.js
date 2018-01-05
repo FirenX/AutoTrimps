@@ -400,7 +400,7 @@ AutoPerks.applyCalculationsRespec = function(perks){
     else {
         debug("A Respec would be required and is not available. You used it already, try again next portal.","other");
         allocatorBtn1.setAttribute('class', 'btn inPortalBtn settingsBtn settingBtnfalse');
-        tooltip("Automatic Perk Allocation Error", "customText", event, "A Respec would be required and is NOT available. You used it already, try again next portal. Press <b>esc</b> to close this tooltip." );
+        tooltip("Automatic Perk Allocation Error", "customText", null, "A Respec would be required and is NOT available. You used it already, try again next portal. Press <b>esc</b> to close this tooltip." );
     }
 }
 
