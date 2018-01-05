@@ -22,7 +22,8 @@ MODULES["automaps"].maxMapBonus = 10;       //cap how many maps are run during W
 MODULES["automaps"].wantHealthMapBonus = 10;//cap how many maps are run during Want More Health mode
 MODULES["automaps"].SpireFarm199Maps = true;   //this will farm spire on 199 maps instead of 200 maps when Map Reducer is bought
 MODULES["automaps"].watchChallengeMaps = [15, 25, 35, 50];  //during 'watch' challenge, run maps on these levels:
-MODULES["automaps"].lifeChallengeHighAfter = 50; //during 'Life' challenge, keep stacks high after that level
+MODULES["automaps"].lifeHighStacks = 100; //during 'Life' challenge, least amount of stacks to consider high
+MODULES["automaps"].lifeKeepHighAfter = 50; //during 'Life' challenge, keep stacks high after that level
 MODULES["automaps"].shouldFarmCell = 59;
 MODULES["automaps"].SkipNumUnboughtPrestiges = 2;   //exceeding this number of unbought prestiges will trigger a skip of prestige mode.
 MODULES["automaps"].UnearnedPrestigesRequired = 2;
@@ -373,10 +374,10 @@ function autoMap() {
     }
 
     //during 'Life' challenge, keep stacks high on these levels
-    if (game.global.challengeActive == 'Life' && customVars.lifeChallengeHighAfter < game.global.world){
+    if (game.global.challengeActive == 'Life' && customVars.lifeKeepHighAfter < game.global.world){
         var enemy = getCurrentEnemy();
         if (typeof enemy === 'undefined') {}
-        else if (game.challenges.Life.stacks < 100 && enemy.mutation == 'Living') {
+        else if (game.challenges.Life.stacks < customVars.lifeHighStacks && enemy.mutation == 'Living') {
           mapsClicked();
           if (game.global.switchToMaps)
               mapsClicked();
@@ -471,7 +472,7 @@ function autoMap() {
                 break;
             }
             var treasure = false;
-            if (theMap.name == 'Trimple Of Doom' && (!dont && (game.global.challengeActive == "Meditate" || game.global.challengeActive == "Trapper") || game.mapUnlocks.AncientTreasure /* <- FIXME delete after update */ && game.mapUnlocks.AncientTreasure.canRunOnce && game.global.world >= (treasure = getPageSetting('TrimpleZ')))) {
+            if (theMap.name == 'Trimple Of Doom' && (!dont && (game.global.challengeActive == "Meditate" || game.global.challengeActive == "Trapper") || game.mapUnlocks.AncientTreasure /* <- FIXME delete after update */ && game.mapUnlocks.AncientTreasure.canRunOnce && game.global.world >= Math.abs(treasure = getPageSetting('TrimpleZ')))) {
                 var theMapDifficulty = Math.ceil(theMap.difficulty / 2);
                 if ((game.global.world < 33 + theMapDifficulty) || treasure > -33 && treasure < 33) continue;
                 selectedMap = theMap.id;
