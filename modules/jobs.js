@@ -31,7 +31,7 @@ function safeBuyJob(jobTitle, amount) {
             game.global.buyAmt = 'Max';
             game.global.maxSplit = 1;
             //if we can't afford it, try to use 'Max' and try again.
-            result = canAffordJob(jobTitle, false) && freeWorkers;
+            result = canAffordJob(jobTitle, false) && freeWorkers && game.jobs[jobTitle].locked == 0;
         }
     }
     if (result) {
