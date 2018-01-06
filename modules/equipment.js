@@ -237,7 +237,8 @@ function autoLevelEquipment() {
             Cost: 0
         };
     }
-    var enemyDamage = getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.2);
+    var enemyDamage;
+    enemyDamage = getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.2);
     enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
     var enemyHealth = getEnemyMaxHealth(game.global.world, 99);
     //Take Spire as a special case.
@@ -265,6 +266,10 @@ function autoLevelEquipment() {
     if(game.global.challengeActive == 'Lead') {
         enemyDamage *= 2.5;
         enemyHealth *= 7;
+    }
+    if (game.global.challengeActive == "Coordinate"){
+        enemyDamage *= getBadCoordLevel();
+        enemyHealth *= getBadCoordLevel();
     }
     var pierceMod = (game.global.brokenPlanet && !game.global.mapsActive) ? getPierceAmt() : 0;
     //change name to make sure these are local to the function
