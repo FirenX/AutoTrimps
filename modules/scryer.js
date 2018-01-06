@@ -44,7 +44,7 @@ function useScryerStance() {
     if (useoverkill && game.portal.Overkill.level > 0) {
         var avgDamage = (baseDamage * (1-getPlayerCritChance()) + (baseDamage * getPlayerCritChance() * getPlayerCritDamageMult()));
         var Sstance = 0.5;
-        var ovkldmg = avgDamage * Sstance * (game.portal.Overkill.level*0.005);
+        var ovkldmg = baseDamage * Sstance * (game.portal.Overkill.level*0.005);
         //are we going to overkill in S?
         var ovklHDratio = getCurrentEnemy(1).maxHealth / ovkldmg;
         if (ovklHDratio < 8) {
@@ -73,9 +73,10 @@ function useScryerStance() {
 
     //check for corrupted cells (and exit)
     var iscorrupt = getCurrentEnemy(1).mutation == "Corruption";
+    var isempowered = getCurrentEnemy(1).empowerment !== undefined;
     iscorrupt = iscorrupt || (mutations.Magma.active() && game.global.mapsActive);
     iscorrupt = iscorrupt || (game.global.mapsActive && getCurrentMapObject().location == "Void" && game.global.world >= mutations.Corruption.start());
-    if (iscorrupt && getPageSetting('ScryerSkipCorrupteds2')) {
+    if (iscorrupt && getPageSetting('ScryerSkipCorrupteds2') || isempowered && getPageSetting('ScryerSkipEmpowered2')) {
         autostancefunction();
         wantToScry = false;
         return;
