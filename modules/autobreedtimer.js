@@ -29,7 +29,7 @@ function autoBreedTimer() {
         else if(game.global.challengeActive == 'Life') {
             if (game.challenges.Life.stacks < Math.min(MODULES["automaps"].lifeHighStacks, 150)) { //breed fast when constantly abandoning while avoiding living enemies
                 setPageSetting('GeneticistTimer',5);
-            } else if (game.challenges.Life.stacks > 75 + 0.5 * MODULES["automaps"].lifeHighStacks)) { //reset when half way back to 150
+            } else if (game.challenges.Life.stacks > 75 + 0.5 * MODULES["automaps"].lifeHighStacks) { //reset when half way back to 150
                 setPageSetting('GeneticistTimer',30);
             }
         }
