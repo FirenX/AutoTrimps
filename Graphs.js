@@ -1168,4 +1168,4 @@ function lookUpZoneData(zone,portal) {
     }
 }
 //run the main gatherInfo function 1 time every second
-setInterval(gatherInfo, 100);
+// setInterval(gatherInfo, 100);

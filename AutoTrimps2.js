@@ -259,6 +259,7 @@ function mainLoop() {
 
     if (getPageSetting('AutoNatureTokens')) autoNatureTokens();
 
+    gatherInfo(); //gather main info for the graph
     //Runs any user provided scripts - by copying and pasting a function named userscripts() into the Chrome Dev console. (F12)
     if (userscriptOn) userscripts();
     //rinse, repeat
