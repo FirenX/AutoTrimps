@@ -2,6 +2,8 @@ MODULES["magmite"] = {};
 //These can be changed (in the console) if you know what you're doing:
 MODULES["magmite"].algorithm = 2;   //2 is advanced cost/benefit calculation between capacity/efficiency. 1 is buy-cheapest-upgrade.
 
+    var waitForDimGen = false;  //Used for Max Trimp Gain
+
 //Auto Magmite spender before portal
 function autoMagmiteSpender() {
     var didSpend = false;
@@ -165,6 +167,16 @@ function autoGenerator() {
 function autoGenerator2() {
   const MI = 0, FUEL = 1, HYBRID = 2;
   // Respect overrides first.
+  if (getPageSetting('AutoGen2Max')) {
+    changeGeneratorState(FUEL);
+      if (game.permanentGeneratorUpgrades.Storage.owned) {
+        waitForDimGen = (game.global.magmaFuel > getGeneratorFuelCap() + 2 * getFuelBurnRate())
+      } else {
+        var currentGain = Math.min(game.generatorUpgrades.Supply.modifier, 0.2 + ((game.global.world - 230) * 0.01))
+        waitForDimGen = (game.global.magmaFuel + currentGain > getGeneratorFuelCap())
+      }
+    return;
+  }
   if (getPageSetting('AutoGen2Override') && autoGenOverrides())
     return;
 

@@ -384,6 +384,16 @@ function autoMap() {
         }
     }
 
+    //If we are waiting for DimGen, leave the world and farm
+    if (waitForDimGen) {
+        shouldDoMaps = true;
+        if (!game.global.preMapsActive && game.global.mapsActive) {
+            mapsClicked();
+            if (game.global.switchToMaps)
+                mapsClicked();
+        }
+        waitForDimGen = false;  //Always reset this and let autoGenerator2 handle it
+    }
     //Farm X Minutes Before Spire:
     var shouldDoSpireMaps = false;
     preSpireFarming = (isActiveSpireAT()) && (spireTime = (new Date().getTime() - game.global.zoneStarted) / 1000 / 60) < getPageSetting('MinutestoFarmBeforeSpire');

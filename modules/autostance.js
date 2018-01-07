@@ -77,6 +77,9 @@ function autoStance() {
         var enemyHealth = enemy.health;
         var enemyDamage = enemy.attack * 1.2;
         enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
+        if (getEmpowerment() == "Ice"){
+          enemyDamage *= game.empowerments.Ice.getCombatModifier();
+        }
         //check for world Corruption
         if (enemy && enemy.mutation == "Corruption"){
             enemyHealth *= getCorruptScale("health");
@@ -118,6 +121,9 @@ function autoStance() {
         var enemyHealth = enemy.health;
         var enemyDamage = enemy.attack * 1.2;
         enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
+        if (getEmpowerment() == "Ice"){
+          enemyDamage *= game.empowerments.Ice.getCombatModifier();
+        }
         //check for voidmap Corruption
         if (getCurrentMapObject().location == "Void" && corrupt) {
             enemyDamage *= getCorruptScale("attack");
@@ -302,6 +308,9 @@ function autoStance2() {
         enemyDamage *= 2;
     if (enemy.corrupted == 'corruptTough')
         enemyHealth *= 5;
+    if (getEmpowerment() == "Ice"){
+    		enemyDamage *= game.empowerments.Ice.getCombatModifier();
+    }
 
     //calc X,D,B:
     var xDamage = (enemyDamage - baseBlock);
