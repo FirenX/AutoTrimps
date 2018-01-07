@@ -231,7 +231,7 @@ function buyBuildings() {
     var nursminlvl = getPageSetting('NoNurseriesUntil');
     var preSpireOverride = getPageSetting('PreSpireNurseries');
     //override NoNurseriesUntil and MaxNursery if on a Spire >= SpireLimit, or on a world zone < 200 when SpireLimit is set to <= 1
-    var overrideNurseries = preSpireOverride >= 0 && (isActiveSpireAT() || (game.global.world < 200 && getPageSetting('SpireLimit') <= 1));
+    var overrideNurseries = preSpireOverride >= 0 && isActiveSpireAT();
     if (game.global.world < nursminlvl && !overrideNurseries) {
         postBuy2(oldBuy);
         return;
