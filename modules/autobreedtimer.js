@@ -30,8 +30,11 @@ function autoBreedTimer() {
             if (game.challenges.Life.stacks < Math.min(MODULES["automaps"].lifeHighStacks, 150)) { //breed fast when constantly abandoning while avoiding living enemies
                 setPageSetting('GeneticistTimer',5);
             } else if (game.challenges.Life.stacks > 75 + 0.5 * MODULES["automaps"].lifeHighStacks) { //reset when half way back to 150
-                setPageSetting('GeneticistTimer',30);
+                setPageSetting('GeneticistTimer',defaultBreedTimer);
             }
+        }
+        else if (game.global.challengeActive == "Daily" && typeof game.global.dailyChallenge.bogged !== 'undefined') {
+              setPageSetting('GeneticistTimer',Math.min(defaultBreedTimer,Math.floor(0.4 / dailyModifiers.bogged.getMult(game.global.dailyChallenge.bogged.strength))));
         }
         else if (getPageSetting('SpireBreedTimer') > -1 && isActiveSpireAT())
             setPageSetting('GeneticistTimer',getPageSetting('SpireBreedTimer'));
