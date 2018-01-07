@@ -26,13 +26,15 @@ function loadPageVariables() {
     }
 }
 
-function getCorruptScale(type) {
+function getCorruptScale(type, healthy) {
+    if (healthy === undefined)
+        healthy = false;
     switch (type) {
         case "attack":
-            return mutations.Corruption.statScale(3);
+            return (healty) ? mutations.Healty.statScale(5) : mutations.Corruption.statScale(3);
 
         case "health":
-            return mutations.Corruption.statScale(10);
+            return (healty) ? mutations.Healty.statScale(14) : mutations.Corruption.statScale(10);
     }
 }
 

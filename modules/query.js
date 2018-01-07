@@ -103,9 +103,11 @@ function getEnemyMaxAttack(world, level, name, diff, corrupt) {
     return Math.floor(amt);
 }
 
-function getEnemyMaxHealth(world, level, corrupt) {
+function getEnemyMaxHealth(world, level, corrupt, healthy) {
     if (!level)
         level = 30;
+    if (healthy === undefined)
+        healty = false;
     var amt = 0;
     amt += 130 * Math.sqrt(world) * Math.pow(3.265, world / 2);
     amt -= 110;
@@ -124,7 +126,7 @@ function getEnemyMaxHealth(world, level, corrupt) {
     if (!corrupt)
         amt *= game.badGuys["Grimp"].health;
     else
-        amt *= getCorruptScale("health");
+        amt *= getCorruptScale("health", healty);
     return Math.floor(amt);
 }
 
@@ -155,6 +157,8 @@ function getCorruptedCellsNum() {
         enemy = game.global.gridArray[i];
         if (enemy.mutation == "Corruption")
             corrupteds++;
+        if (enemy.mutation == "Healthy")
+            corrupteds += 2;
     }
     return corrupteds;
 }

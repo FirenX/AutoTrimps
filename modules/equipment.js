@@ -241,6 +241,20 @@ function autoLevelEquipment() {
     enemyDamage = getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.2);
     enemyDamage = calcDailyAttackMod(enemyDamage); //daily mods: badStrength,badMapStrength,bloodthirst
     var enemyHealth = getEnemyMaxHealth(game.global.world, 99);
+    //Corruption Zone Proportionality Farming Calculator:
+    var corrupt = game.global.world >= mutations.Corruption.start(true);
+    if (getPageSetting('CorruptionCalc') && corrupt) {
+        var cptnum = getCorruptedCellsNum();     //count corrupted cells
+        var cpthlth = getCorruptScale("health"); //get corrupted health mod
+        var cptpct = cptnum / 100;               //percentage of zone which is corrupted.
+        var hlthprop = cptpct * cpthlth;         //Proportion of cells corrupted * health of a corrupted cell
+        if (hlthprop >= 1)                       //dont allow sub-1 numbers to make the number less
+            enemyHealth *= hlthprop;
+        var cptatk = getCorruptScale("attack");  //get corrupted attack mod
+        var atkprop = cptpct * cptatk;           //Proportion of cells corrupted * attack of a corrupted cell
+        if (atkprop >= 1)
+            enemyDamage *= atkprop;
+    }
     //Take Spire as a special case.
     var spirecheck = (isActiveSpireAT());
     if (spirecheck) {

@@ -72,7 +72,7 @@ function useScryerStance() {
     }
 
     //check for corrupted cells (and exit)
-    var iscorrupt = getCurrentEnemy(1).mutation == "Corruption";
+    var iscorrupt = getCurrentEnemy(1).mutation == "Corruption" || getCurrentEnemy(1).mutation == "Healthy";
     var isempowered = getCurrentEnemy(1).empowerment !== undefined;
     iscorrupt = iscorrupt || (mutations.Magma.active() && game.global.mapsActive);
     iscorrupt = iscorrupt || (game.global.mapsActive && getCurrentMapObject().location == "Void" && game.global.world >= mutations.Corruption.start());
