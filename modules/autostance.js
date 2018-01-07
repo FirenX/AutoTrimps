@@ -82,11 +82,21 @@ function autoStance() {
             enemyHealth *= getCorruptScale("health");
             enemyDamage *= getCorruptScale("attack");
         }
+        if (enemy && enemy.mutation == "Healthy"){
+            enemyHealth *= getCorruptScale("health", true);
+            enemyDamage *= getCorruptScale("attack", true);
+        }
         if (enemy && enemy.corrupted == 'corruptStrong') {
             enemyDamage *= 2;
         }
         if (enemy && enemy.corrupted == 'corruptTough') {
             enemyHealth *= 5;
+        }
+        if (enemy && enemy.corrupted == "healthyStrong") {
+            enemyDamage *= 2.5;
+        }
+        if (enemy && enemy.corrupted == "healthyTough") {
+            enemyHealth *= 7.5;
         }
         if (enemy && game.global.challengeActive == "Nom" && typeof enemy.nomStacks !== 'undefined'){
             enemyDamage *= Math.pow(1.25, enemy.nomStacks);
@@ -198,7 +208,7 @@ function autoStance() {
     //added voidcrit.
     //voidcrit is OK if the buff isn't crit-buff, or we will survive a crit, or we are going to one-shot them (so they won't be able to crit)
     const ignoreCrits = getPageSetting('IgnoreCrits'); // or if ignored
-    var isCritVoidMap = ignoreCrits == 2 ? false : (!ignoreCrits && game.global.voidBuff == 'getCrit') || (enemy && enemy.corrupted == 'corruptCrit');
+    var isCritVoidMap = ignoreCrits == 2 ? false : (!ignoreCrits && game.global.voidBuff == 'getCrit') || (enemy && enemy.corrupted == 'corruptCrit') || (enemy && enemy.corrupted == 'healthyCrit');
     var voidCritinDok = !isCritVoidMap || (!enemyFast ? enemyHealth <= baseDamage : false) || (newSquadRdy && dHealth > dVoidCritDamage) || (dHealth - missingHealth > dVoidCritDamage);
     var voidCritinXok = !isCritVoidMap || (!enemyFast ? enemyHealth <= baseDamage : false) || (newSquadRdy && xHealth > xVoidCritDamage) || (xHealth - missingHealth > xVoidCritDamage);
 
@@ -277,8 +287,8 @@ function autoStance2() {
     if (ignoreCrits == 2) { // Ignore all!
         (isCrushed = (game.global.challengeActive == "Crushed") && game.global.soldierHealth > game.global.soldierCurrentBlock)
             && (critMulti *= 5);
-        (isCritVoidMap = (!ignoreCrits && game.global.voidBuff == 'getCrit') || (enemy.corrupted == 'corruptCrit'))
-            && (critMulti *= 5);
+        (isCritVoidMap = (!ignoreCrits && game.global.voidBuff == 'getCrit') || (enemy.corrupted == 'corruptCrit') || (enemy.corrupted == 'healthyCrit'))
+            && (critMulti *= (enemy.corrupted == 'healthyCrit') ? 7 : 5);
         (isCritDaily = (game.global.challengeActive == "Daily") && (typeof game.global.dailyChallenge.crits !== 'undefined'))
             && (critMulti *= dailyModifiers.crits.getMult(game.global.dailyChallenge.crits.strength));
         enemyDamage *= critMulti;
@@ -453,8 +463,8 @@ function autoStanceCheck(enemyCrit) {
     if (ignoreCrits == 2) { // Ignored all!
         (isCrushed = game.global.challengeActive == "Crushed" && game.global.soldierHealth > game.global.soldierCurrentBlock)
             && enemyCrit && (critMulti *= 5);
-        (isCritVoidMap = game.global.voidBuff == 'getCrit' || enemy.corrupted == 'corruptCrit')
-            && enemyCrit && (critMulti *= 5);
+        (isCritVoidMap = game.global.voidBuff == 'getCrit' || enemy.corrupted == 'corruptCrit' || enemy.corrupted == 'healthyCrit')
+            && enemyCrit && (critMulti *= (enemy.corrupted == 'healthyCrit') ? 7 : 5);
         (isCritDaily = game.global.challengeActive == "Daily" && typeof game.global.dailyChallenge.crits !== 'undefined')
             && enemyCrit && (critMulti *= dailyModifiers.crits.getMult(game.global.dailyChallenge.crits.strength));
         if (enemyCrit)
@@ -468,6 +478,10 @@ function autoStanceCheck(enemyCrit) {
         enemyDamage *= 2;
     if (enemy.corrupted == 'corruptTough')
         enemyHealth *= 5;
+    if (enemy.corrupted == 'healthyStrong')
+        enemyDamage *= 2.5;
+    if (enemy.corrupted == 'healthyTough')
+        enemyHealth *= 7;
     //calc X,D,B:
     enemyDamage -= ourBlock;
     var pierce = 0;
