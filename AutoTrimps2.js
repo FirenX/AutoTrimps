@@ -157,6 +157,7 @@ function mainLoop() {
     if (mainCleanup() // Z1 new world
             || portalWindowOpen && ATphase == 1 // in the portal screen (for manual portallers)
             || (!heirloomsShown && heirloomFlag) // closed heirlooms screen
+            || (heirloomsShown && game.global.selectedHeirloom.length > 0) // heirloom selected
             || (heirloomCache != game.global.heirloomsExtra.length)) { // inventory size changed (a drop appeared)
             // also pre-portal: portal.js:111
         if (getPageSetting('AutoHeirlooms2')) autoHeirlooms2(); //"Auto Heirlooms 2" (heirlooms.js)
