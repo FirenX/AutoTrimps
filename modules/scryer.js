@@ -74,6 +74,10 @@ function useScryerStance() {
     //check for corrupted cells (and exit)
     var iscorrupt = getCurrentEnemy(1).mutation == "Corruption" || getCurrentEnemy(1).mutation == "Healthy";
     var isempowered = getCurrentEnemy(1).empowerment !== undefined;
+    //Poison button being on will override the Corruption and Empowered Settings
+    var ispoison = (getPageSetting('ScryerUseWhenPoison') && (getEmpowerment() == "Poison"));
+    iscorrupt = iscorrupt && !ispoison;
+    isempowered = isempowered && !ispoison;
     iscorrupt = iscorrupt || (mutations.Magma.active() && game.global.mapsActive);
     iscorrupt = iscorrupt || (game.global.mapsActive && getCurrentMapObject().location == "Void" && game.global.world >= mutations.Corruption.start());
     if (iscorrupt && getPageSetting('ScryerSkipCorrupteds2') || isempowered && getPageSetting('ScryerSkipEmpowered2')) {
