@@ -198,8 +198,8 @@ function autoStance() {
             xDamage = enemyDamage*5 - baseBlock > 0 ? enemyDamage*5 - baseBlock : 0;
     }
     //^dont attach^.
-    if (game.global.voidBuff == "bleed" || (enemy && enemy.corrupted == 'corruptBleed') || (cell.corrupted == 'healthyBleed')) {
-        var bleedMod = (cell.corrupted == 'healthyBleed') ? 0.3 : 0.2;
+    if (game.global.voidBuff == "bleed" || (enemy && enemy.corrupted == 'corruptBleed') || (enemy.corrupted == 'healthyBleed')) {
+        var bleedMod = (enemy.corrupted == 'healthyBleed') ? 0.3 : 0.2;
         dDamage += Math.ceil(game.global.soldierHealth * bleedMod);
         xDamage += Math.ceil(game.global.soldierHealth * bleedMod);
         bDamage += Math.ceil(game.global.soldierHealth * bleedMod);
@@ -377,7 +377,7 @@ function autoStance2() {
     //^dont attach^.
     if (game.global.voidBuff == "bleed" || (enemy.corrupted == 'corruptBleed') || (enemy.corrupted == 'healthyBleed')) {
         //20% or 30% of CURRENT health;
-        var bleedMod = (cell.corrupted == 'healthyBleed') ? 0.3 : 0.2;
+        var bleedMod = (enemy.corrupted == 'healthyBleed') ? 0.3 : 0.2;
         var added = Math.ceil(game.global.soldierHealth * bleedMod);
         dDamage += added;
         xDamage += added;
