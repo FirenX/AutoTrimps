@@ -103,6 +103,7 @@ var breedFire = false;
 var shouldFarm = false;
 var enoughDamage = true;
 var enoughHealth = true;
+var waitForDimGen = false;
 
 var baseDamage = 0;
 var baseBlock = 0;
