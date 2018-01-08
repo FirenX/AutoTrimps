@@ -356,3 +356,19 @@ function calcDailyAttackMod(number) {
     }
     return number;
 }
+
+function calcAttackTime(ceil) {
+    if (ceil == undefined)
+        ceil = false;
+    var number;
+	  number = (game.portal.Agility.level) ? 1000 * Math.pow(1 - game.portal.Agility.modifier, game.portal.Agility.level) : 1000;
+	  if (game.talents.hyperspeed.purchased)
+        number -= 100;
+	  if (game.talents.hyperspeed2.purchased && (game.global.world <= Math.floor((game.global.highestLevelCleared + 1) * 0.5)))
+		    number -= 100;
+	  else if (game.global.mapExtraBonus == "fa")
+		    number -= 100;
+    if (ceil)
+        number = 100*Math.ceil(number/100);
+    return number;
+}
