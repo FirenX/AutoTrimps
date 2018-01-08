@@ -73,9 +73,11 @@ function autoMap() {
 
     var AutoStance = getPageSetting('AutoStance');
 
-    //if we are in mapology and we have no credits, exit
+    //if we are in mapology and we have no credits, exit and go to world
     if (game.global.challengeActive == "Mapology" && game.challenges.Mapology.credits < 1) {
         updateAutoMapsStatus();
+        if (game.global.preMapsActive)
+            mapsClicked();
         return;
     }
     var AutoStance = getPageSetting('AutoStance');
