@@ -198,10 +198,11 @@ function autoStance() {
             xDamage = enemyDamage*5 - baseBlock > 0 ? enemyDamage*5 - baseBlock : 0;
     }
     //^dont attach^.
-    if (game.global.voidBuff == "bleed" || (enemy && enemy.corrupted == 'corruptBleed')) {
-        dDamage += game.global.soldierHealth * 0.2;
-        xDamage += game.global.soldierHealth * 0.2;
-        bDamage += game.global.soldierHealth * 0.2;
+    if (game.global.voidBuff == "bleed" || (enemy && enemy.corrupted == 'corruptBleed') || (cell.corrupted == 'healthyBleed')) {
+        var bleedMod = (cell.corrupted == 'healthyBleed') ? 0.3 : 0.2;
+        dDamage += Math.ceil(game.global.soldierHealth * bleedMod);
+        xDamage += Math.ceil(game.global.soldierHealth * bleedMod);
+        bDamage += Math.ceil(game.global.soldierHealth * bleedMod);
     }
     baseDamage *= (game.global.titimpLeft > 0 ? 2 : 1); //consider titimp
     //double attack is OK if the buff isn't double attack, or we will survive a double attack. see main.js @ 7197-7217 https://puu.sh/ssVNP/95f699a879.png (cant prevent the 2nd hit)
@@ -374,9 +375,10 @@ function autoStance2() {
         bDamage += added;
     }
     //^dont attach^.
-    if (game.global.voidBuff == "bleed" || (enemy.corrupted == 'corruptBleed')) {
-        //20% of CURRENT health;
-        var added = game.global.soldierHealth * 0.20;
+    if (game.global.voidBuff == "bleed" || (enemy.corrupted == 'corruptBleed') || (enemy.corrupted == 'healthyBleed')) {
+        //20% or 30% of CURRENT health;
+        var bleedMod = (cell.corrupted == 'healthyBleed') ? 0.3 : 0.2;
+        var added = Math.ceil(game.global.soldierHealth * bleedMod);
         dDamage += added;
         xDamage += added;
         bDamage += added;
