@@ -354,6 +354,8 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                     }
                 }
                 break;
+            //As of version 4.6 Gems lost their late game value and Fragments are way more important now
+            /*
             case 'DragimpSpeed':
                 tempEff = 0.75*loom.mods[m][1]/100;
                 eff += tempEff;
@@ -378,6 +380,35 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                     if(tempEff > bestUpgrade.effect) {
                         bestUpgrade.effect = tempEff;
                         bestUpgrade.name = 'gemsDrop';
+                        bestUpgrade.index = m;
+                    }
+                }
+                break;
+            */
+            case 'ExplorerSpeed':
+                tempEff = 0.75*loom.mods[m][1]/100;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.defaultSteps[loom.rarity];
+                    tempEff = (0.75*steps[2]/100)/((game.heirlooms.Staff.ExplorerSpeed.currentBonus/100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if(tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'ExplorerSpeed';
+                        bestUpgrade.index = m;
+                    }
+                }
+                break;
+            case 'fragmentsDrop':
+                tempEff = 0.75*loom.mods[m][1]/100;
+                eff += tempEff;
+                if(upgrade) {
+                    steps = game.heirlooms.defaultSteps[loom.rarity];
+                    tempEff = (0.75*steps[2]/100)/((game.heirlooms.Staff.fragmentsDrop.currentBonus/100) + 1);
+                    tempEff = tempEff / getModUpgradeCost(loom, m);
+                    if(tempEff > bestUpgrade.effect) {
+                        bestUpgrade.effect = tempEff;
+                        bestUpgrade.name = 'fragmentsDrop';
                         bestUpgrade.index = m;
                     }
                 }
@@ -443,7 +474,7 @@ function evaluateHeirloomMods(loom, location, upgrade) {
                 if(loom.type == 'Staff') {
                     steps = game.heirlooms.defaultSteps[loom.rarity];
                     av = steps[0] + ((steps[1] - steps[0])/2);
-                    if(!checkForMod('MinerSpeed', index, location) || !checkForMod('metalDrop', index, location) || !checkForMod('DragimpSpeed', index, location) || !checkForMod('gemsDrop', index, location)){
+                    if(!checkForMod('MinerSpeed', index, location) || !checkForMod('metalDrop', index, location) || !checkForMod('ExplorerSpeed', index, location) || !checkForMod('fragmentsDrop', index, location)){
                         eff += 0.75*av/100;
                     }
                     else if(!checkForMod('FarmerSpeed', index, location) || !checkForMod('LumberjackSpeed', index, location)) {
