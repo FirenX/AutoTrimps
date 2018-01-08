@@ -14,7 +14,7 @@ function manualLabor() {
     var trapTrimpsOK = getPageSetting('TrapTrimps');
     var targetBreed = getPageSetting('GeneticistTimer');
     var trapperTrapUntilFull = game.global.challengeActive == "Trapper" && notFullPop;
-    var watchJumpstartTraps  = game.global.challengeActive == "Watch"  && notFullPop;    
+    var watchJumpstartTraps  = game.global.challengeActive == "Watch" && notFullPop;
     var hasTurkimp = game.talents.turkimp4.purchased || game.global.turkimpTimer > 0;
 
     //FRESH GAME NO HELIUM CODE.
@@ -166,7 +166,7 @@ function manualLabor2() {
     //Buildings:
     var manualBuildSpeedAdvantage = getPlayerModifier() / game.global.autoCraftModifier;
         //pre-requisites for all: have something in the build queue, and playerCraftmod does actually speed it up.
-    if ((game.global.buildingsQueue.length && manualBuildSpeedAdvantage > 1) && //AND:
+    if ((game.global.buildingsQueue.length && manualBuildSpeedAdvantage > 1 && !game.talents.foreman.purchased) && //AND:
     //if we have 2 or more buildings in queue, and playerCraftmod is high enough (>3x autoCraftmod) to speed it up.
     ((game.global.buildingsQueue.length >= 2 && manualBuildSpeedAdvantage > 3) ||
     //Prioritize Storage buildings when they hit the front of the queue (in case they are the only object in the queue).
