@@ -98,10 +98,10 @@ function autoMap() {
     // if force prestige, check if we are behind any first
     if ((getPageSetting('ForcePresZ') >= 0) && (game.global.world >= getPageSetting('ForcePresZ'))) {
         const prestigeList = ['Supershield','Dagadder','Megamace','Polierarm','Axeidic','Greatersword','Harmbalest','Bootboost','Hellishmet','Pantastic','Smoldershoulder','Bestplate','GambesOP'];
-        needPrestige = prestigeList.some(prestige => game.mapUnlocks[prestige].last <= game.global.world - 5);
+        needPrestige = prestigeList.some(prestige => game.mapUnlocks[prestige].last < game.global.world - 5);
     } else
     //calculate if we are behind on unlocking prestiges
-    needPrestige = prestige != "Off" && game.mapUnlocks[prestige] && game.mapUnlocks[prestige].last <= game.global.world - 5 && game.global.challengeActive != "Frugal";
+    needPrestige = prestige != "Off" && game.mapUnlocks[prestige] && game.mapUnlocks[prestige].last < game.global.world - 5 && game.global.challengeActive != "Frugal";
     //dont need prestige if we are caught up, and have (2) unbought prestiges:
     skippedPrestige = false;
     if (needPrestige && getPageSetting('PrestigeSkipMode')) {
