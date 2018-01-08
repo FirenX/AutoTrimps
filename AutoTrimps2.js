@@ -155,7 +155,7 @@ function mainLoop() {
     addbreedTimerInsideText.innerHTML = parseFloat(game.global.lastBreedTime/1000).toFixed(1) + 's'; //add hidden next group breed timer;
     if (armycount.className != "tooltipadded") addToolTipToArmyCount();
     if (mainCleanup() // Z1 new world
-            || portalWindowOpen // in the portal screen (for manual portallers)
+            || portalWindowOpen && ATphase == 1 // in the portal screen (for manual portallers)
             || (!heirloomsShown && heirloomFlag) // closed heirlooms screen
             || (heirloomCache != game.global.heirloomsExtra.length)) { // inventory size changed (a drop appeared)
             // also pre-portal: portal.js:111
