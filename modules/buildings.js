@@ -241,7 +241,7 @@ function buyBuildings() {
     //even if we are trying to manage breed timer pre-geneticists, start buying nurseries once geneticists are unlocked AS LONG AS we can afford a geneticist (to prevent nurseries from outpacing geneticists soon after they are unlocked)
     if ((targetBreed < getBreedTime() || targetBreed <= 0 ||
             (targetBreed < getBreedTime(true) && game.global.challengeActive == 'Watch') ||
-            (!game.jobs.Geneticist.locked && canAffordJob('Geneticist', false, 1))) && !game.buildings.Nursery.locked) {
+            (!game.jobs.Geneticist.locked && canAffordJob('Geneticist', false, 1)) && !enoughHealth) && !game.buildings.Nursery.locked) {
         var nwr = customVars.nursCostRatio; //nursery to warpstation/collector cost ratio. Also for extra gems.
         var nursCost = getBuildingItemPrice(game.buildings.Nursery, "gems", false, 1);
         var warpCost = getBuildingItemPrice(game.buildings.Warpstation, "gems", false, 1);

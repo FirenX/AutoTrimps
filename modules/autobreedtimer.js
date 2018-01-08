@@ -49,8 +49,11 @@ function autoBreedTimer() {
     //Don't hire geneticists if we have already reached 30 anti stacks (put off further delay to next trimp group) //&& (game.global.lastBreedTime/1000 + getBreedTime(true) < targetBreed)
     if ((newSquadRdy || (game.global.lastBreedTime/1000 + getBreedTime(true) < targetBreed)) && targetBreed > getBreedTime() && !game.jobs.Geneticist.locked && targetBreed > getBreedTime(true) && game.resources.trimps.soldiers > 0 && !breedFire) {
         var time = getBreedTime();
-        var timeOK = time > 0 ? time : 0.1;
-        var numgens = Math.trunc(Math.log(targetBreed / timeOK ) / Math.log(1.02));
+        var timeOK = time >= 0.1 ? time : 0.1;
+        var potencyMod = getPotencyMod()/10;
+        //var numgens = Math.trunc(Math.log(targetBreed / timeOK ) / Math.log(1/0.98));
+        //var numgens = Math.trunc(((timeOK / targetBreed) - 1) * log10(1 + (getPotencyMod() / 10)) / log10(0.98));
+        var numgens = Math.trunc(log10((1/potencyMod)*(Math.pow(1+potencyMod,timeOK/targetBreed)-1))/log10(0.98));
         //insert 10% of total food limit here? or cost vs tribute?
         //if there's no free worker spots, fire a farmer
         if (numgens > 0 && fWorkers < numgens)
@@ -79,7 +82,8 @@ function autoBreedTimer() {
     //otherwise, if we have too many geneticists, (remaining time) - start firing them #2
     else if ((fire1 || fire2) && !game.jobs.Geneticist.locked && game.jobs.Geneticist.owned > customVars.fireGensFloor) {
         var timeOK = fireobj > 0 ? fireobj : 0.1;
-        var numgens = Math.trunc(Math.log(targetBreed / timeOK ) / Math.log(1.02)) - 1;
+        var potencyMod = getPotencyMod()/10;
+        var numgens = Math.trunc(log10((1/potencyMod)*(Math.pow(1+potencyMod,timeOK/targetBreed)-1))/log10(0.98)) - 1;
         //debug("2a. Time: " + getBreedTime(true) + " / " + getBreedTime() );
         //debug("2b. " + numgens + " Genes.. / " + game.jobs.Geneticist.owned + " -> " + (game.jobs.Geneticist.owned+numgens));
         safeBuyJob('Geneticist', numgens);
