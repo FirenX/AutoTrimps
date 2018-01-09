@@ -142,7 +142,7 @@ function getCurrentEnemy(current) {
         }
     } else if (game.global.mapsActive && !game.global.preMapsActive) {
         if (typeof game.global.mapGridArray[game.global.lastClearedMapCell + current] === 'undefined') {
-            enemy = game.global.mapGridArray[game.global.gridArray.length - 1];
+            enemy = game.global.mapGridArray[game.global.mapGridArray.length - 1];
         } else {
             enemy = game.global.mapGridArray[game.global.lastClearedMapCell + current];
         }
