@@ -57,7 +57,8 @@ function useScryerStance() {
     //check whether we are in a map with SpecialBonus Cache and near the end of the map
     const cacheBonusList = ["lmc", "hc", "smc", "lc", "lwc", "lsc", "swc", "ssc"];
     if (game.global.mapsActive && !game.global.preMapsActive && cacheBonusList.some(bonus => game.global.mapExtraBonus == bonus)) {
-        if ((game.global.lastClearedMapCell >= game.global.mapGridArray.length - 6) && oktoswitch) {
+        var didOverkill = game.global.mapGridArray.some(x => (x.overkilled == true));
+        if ((game.global.lastClearedMapCell >= game.global.mapGridArray.length - (didOverkill ? 5 : 3)) && oktoswitch) {
             setFormation(4);
             return;
         }
