@@ -159,17 +159,8 @@ function autoMap() {
     //Corruption Zone Proportionality Farming Calculator:
     var corrupt = game.global.world >= mutations.Corruption.start(true);
     if (getPageSetting('CorruptionCalc') && corrupt) {
-        var cptnum = getCorruptedCellsNum();     //count corrupted cells
-        var cpthlth = getCorruptScale("health"); //get corrupted health mod
-        var cptpct = cptnum / 100;               //percentage of zone which is corrupted.
-        var hlthprop = cptpct * cpthlth;         //Proportion of cells corrupted * health of a corrupted cell
-        if (hlthprop >= 1)                       //dont allow sub-1 numbers to make the number less
-            enemyHealth *= hlthprop;
-        var cptatk = getCorruptScale("attack");  //get corrupted attack mod
-        var atkprop = cptpct * cptatk;           //Proportion of cells corrupted * attack of a corrupted cell
-        if (atkprop >= 1)
-            enemyDamage *= atkprop;
-        //console.log("enemy dmg:" + enemyDamage + " enemy hp:" + enemyHealth + " base dmg: " + ourBaseDamage);
+        enemyDamage *= getCorruptedAvgScale("attack");
+        enemyHealth *= getCorruptedAvgScale("health");
     }
     // enter farming if it takes over 4 hits in D stance (16) (and exit if under.)
     if(!getPageSetting('DisableFarm')) {

@@ -107,7 +107,7 @@ function getEnemyMaxHealth(world, level, corrupt, healthy) {
     if (!level)
         level = 30;
     if (healthy === undefined)
-        healty = false;
+        healthy = false;
     var amt = 0;
     amt += 130 * Math.sqrt(world) * Math.pow(3.265, world / 2);
     amt -= 110;
@@ -126,7 +126,7 @@ function getEnemyMaxHealth(world, level, corrupt, healthy) {
     if (!corrupt)
         amt *= game.badGuys["Grimp"].health;
     else
-        amt *= getCorruptScale("health", healty);
+        amt *= getCorruptScale("health", healthy);
     return Math.floor(amt);
 }
 
@@ -162,6 +162,32 @@ function getCorruptedCellsNum() {
     }
     return corrupteds;
 }
+
+function getCorruptedAvgScale(type) { //gives average statscale by corrupted enemies in current world including their mutation
+    if (!(type == "attack" || type == "health")) return;
+    //Average stat increases assuming all mutations (eg. corruptCrit, corruptTough) are equally likely
+    const mutationAverageScale = {"corrupted":{"attack": 1.5, "health": 1.75}, "healthy": {"attack": 2, "health": 2.5}};
+    var factor;
+    var statSum;
+    var corrupteds = 0;
+    var healthies = 0;
+    var rest = 0;
+    var enemy;
+    for (var i = 0; i < game.global.gridArray.length - 1; i++) {
+        enemy = game.global.gridArray[i];
+        if (enemy.mutation == "Corruption")
+            corrupteds++;
+        if (enemy.mutation == "Healthy")
+            healthies++;
+    }
+    rest = 100 - corrupteds - healthies;
+    statSum = rest
+              + getCorruptScale(type, false) * mutationAverageScale.corrupted[type] * corrupteds
+              + getCorruptScale(type, true) * mutationAverageScale.healthy[type] * healthies;
+    factor = statSum / 100;
+    return factor;
+}
+
 function getPotencyMod() {
     var potencyMod = game.resources.trimps.potency;
     //Add potency (book)

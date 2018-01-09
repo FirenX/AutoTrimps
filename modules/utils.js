@@ -31,10 +31,10 @@ function getCorruptScale(type, healthy) {
         healthy = false;
     switch (type) {
         case "attack":
-            return (healty) ? mutations.Healty.statScale(5) : mutations.Corruption.statScale(3);
+            return (healthy) ? mutations.Healthy.statScale(5) : mutations.Corruption.statScale(3);
 
         case "health":
-            return (healty) ? mutations.Healty.statScale(14) : mutations.Corruption.statScale(10);
+            return (healthy) ? mutations.Healthy.statScale(14) : mutations.Corruption.statScale(10);
     }
 }
 
