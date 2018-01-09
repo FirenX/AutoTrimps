@@ -200,6 +200,8 @@ function getPotencyMod() {
 function getBreedTime(remaining) {
     var trimps = game.resources.trimps;
     var trimpsMax = trimps.realMax();
+    //If our calculation fails to float precision, use the game's value from string
+    var gameString = document.getElementById("trimpsTimeToFill").innerHTML.split(" ");
 
     var potencyMod = getPotencyMod();
     // <breeding per second> would be calced here without the following line in potencymod
@@ -207,13 +209,12 @@ function getBreedTime(remaining) {
     var timeRemaining = log10((trimpsMax - trimps.employed) / (trimps.owned - trimps.employed)) / log10(potencyMod);
     timeRemaining /= 10;
     if (remaining)
-        return parseFloat(timeRemaining.toFixed(1));
+        return Number.isFinite(parseFloat(timeRemaining.toFixed(1))) ? parseFloat(timeRemaining.toFixed(1)) : gameString[0];
 
     var adjustedMax = (game.portal.Coordinated.level) ? game.portal.Coordinated.currentSend : trimps.maxSoldiers;
     var totalTime = log10((trimpsMax - trimps.employed) / (trimpsMax - adjustedMax - trimps.employed)) / log10(potencyMod);
     totalTime /= 10;
-
-    return parseFloat(totalTime.toFixed(1));
+    return Number.isFinite(parseFloat(totalTime.toFixed(1))) ? parseFloat(totalTime.toFixed(1)) : (gameString[3] ? gameString[3] : gameString[0]);
 }
 
 function isBuildingInQueue(building) {

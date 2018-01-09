@@ -50,15 +50,19 @@ function autoBreedTimer() {
     if ((newSquadRdy || (game.global.lastBreedTime/1000 + getBreedTime(true) < targetBreed)) && targetBreed > getBreedTime() && !game.jobs.Geneticist.locked && targetBreed > getBreedTime(true) && game.resources.trimps.soldiers > 0 && !breedFire) {
         var time = getBreedTime();
         var timeOK = time >= 0.1 ? time : 0.1;
+        timeOK = Math.min(timeOK, targetBreed*10);
         var potencyMod = getPotencyMod()/10;
         //var numgens = Math.trunc(Math.log(targetBreed / timeOK ) / Math.log(1/0.98));
         //var numgens = Math.trunc(((timeOK / targetBreed) - 1) * log10(1 + (getPotencyMod() / 10)) / log10(0.98));
         var numgens = Math.trunc(log10((1/potencyMod)*(Math.pow(1+potencyMod,timeOK/targetBreed)-1))/log10(0.98));
         //insert 10% of total food limit here? or cost vs tribute?
+        //make sure we dont hire too much to handle
+        numgens = Number.isFinite(numgens) ? Math.min(numgens, 100) : 1;
         //if there's no free worker spots, fire a farmer
-        if (numgens > 0 && fWorkers < numgens)
+        if (numgens > 0 && fWorkers < numgens) {
             //do some jiggerypokery in case jobs overflow and firing -workers does 0 (java integer overflow)
             safeFireJob('Farmer', numgens);
+        }
         //hire geneticists in bulk
         if (numgens > 0 && canAffordJob('Geneticist', false, numgens)) {
             //debug("1a. Time: " + getBreedTime(true) + " / " + getBreedTime() );
@@ -67,7 +71,7 @@ function autoBreedTimer() {
             //debug("1c. Time: " + getBreedTime(true) + " / " + getBreedTime() );
         }
         //if all else fails, hire geneticists slowly (not likely)
-        else
+        else if (numgens > 0 && canAffordJob('Geneticist', false, customVars.buyGensIncrement))
             safeBuyJob('Geneticist', customVars.buyGensIncrement);
     }
     var fire1 = targetBreed*1.02 < getBreedTime();
@@ -81,11 +85,15 @@ function autoBreedTimer() {
     //otherwise, if we have too many geneticists, (total time) - start firing them #1
     //otherwise, if we have too many geneticists, (remaining time) - start firing them #2
     else if ((fire1 || fire2) && !game.jobs.Geneticist.locked && game.jobs.Geneticist.owned > customVars.fireGensFloor) {
-        var timeOK = fireobj > 0 ? fireobj : 0.1;
+        var timeOK = fireobj >= 0.1 ? fireobj : 0.1;
+        timeOK = Math.min(timeOK, targetBreed*10);
         var potencyMod = getPotencyMod()/10;
         var numgens = Math.trunc(log10((1/potencyMod)*(Math.pow(1+potencyMod,timeOK/targetBreed)-1))/log10(0.98)) - 1;
         //debug("2a. Time: " + getBreedTime(true) + " / " + getBreedTime() );
         //debug("2b. " + numgens + " Genes.. / " + game.jobs.Geneticist.owned + " -> " + (game.jobs.Geneticist.owned+numgens));
+        //make sure we dont fire too much to handle
+        numgens = Number.isFinite(numgens) ? Math.max(numgens, -100) : -1;
+        if (numgens > 0) numgens = -1;
         safeBuyJob('Geneticist', numgens);
         //debug("2c. Time: " + getBreedTime(true) + " / " + getBreedTime() );
     }
