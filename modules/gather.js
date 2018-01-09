@@ -114,6 +114,9 @@ function manualLabor() {
             else
                 setGather(lowestResource);
         }
+        //change gather for Metal challengesquared to wood if we got a Turkimp
+        if (game.global.challengeActive == 'Metal' && hasTurkimp && game.global.runningChallengeSquared)
+            setGather('wood');
         //Build more traps if we have TrapTrimps on, and we own less than (100) traps.
         else if(trapTrimpsOK && game.global.trapBuildToggled == true && lowOnTraps)
             setGather('buildings');
