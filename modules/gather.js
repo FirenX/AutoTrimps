@@ -240,6 +240,9 @@ function manualLabor2() {
         setGather('metal');
     else
         setGather(lowestResource);
+    //change gather for Metal challengesquared to wood if we got a Turkimp
+    if (game.global.challengeActive == 'Metal' && turkimp && game.global.runningChallengeSquared)
+        setGather('wood');
     //ok
     return true;
 }
