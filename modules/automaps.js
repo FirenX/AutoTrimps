@@ -98,10 +98,10 @@ function autoMap() {
     // if force prestige, check if we are behind any first
     if ((getPageSetting('ForcePresZ') >= 0) && (game.global.world >= getPageSetting('ForcePresZ'))) {
         const prestigeList = ['Supershield','Dagadder','Megamace','Polierarm','Axeidic','Greatersword','Harmbalest','Bootboost','Hellishmet','Pantastic','Smoldershoulder','Bestplate','GambesOP'];
-        needPrestige = prestigeList.some(prestige => game.mapUnlocks[prestige].last < game.global.world - 5);
+        needPrestige = prestigeList.some(prestige => game.mapUnlocks[prestige].last <= game.global.world - 5);
     } else
     //calculate if we are behind on unlocking prestiges
-    needPrestige = prestige != "Off" && game.mapUnlocks[prestige] && game.mapUnlocks[prestige].last < game.global.world - 5 && game.global.challengeActive != "Frugal";
+    needPrestige = prestige != "Off" && game.mapUnlocks[prestige] && game.mapUnlocks[prestige].last <= game.global.world - 5 && game.global.challengeActive != "Frugal";
     //dont need prestige if we are caught up, and have (2) unbought prestiges:
     skippedPrestige = false;
     if (needPrestige && getPageSetting('PrestigeSkipMode')) {
@@ -389,7 +389,9 @@ function autoMap() {
     //If we are waiting for DimGen, leave the world and farm
     if (waitForDimGen) {
         shouldDoMaps = true;
-        if (!game.global.preMapsActive && game.global.mapsActive) {
+        shouldFarm = true;
+        shouldFarmLowerZone = getPageSetting('LowerFarmingZone');
+        if (!game.global.preMapsActive && !game.global.mapsActive) {
             mapsClicked();
             if (game.global.switchToMaps)
                 mapsClicked();
@@ -862,6 +864,7 @@ function updateAutoMapsStatus() {
     var minSp = getPageSetting('MinutestoFarmBeforeSpire');
     if(!autoTrimpSettings.AutoMaps.enabled) status.innerHTML = 'Off';
     else if (game.global.challengeActive == "Mapology" && game.challenges.Mapology.credits < 1) status.innerHTML = 'Out of Map Credits';
+    else if (waitForDimGen) status.innerHTML = 'Waiting for DimGenerator';
     else if (preSpireFarming) {
         var secs = Math.floor(60 - (spireTime*60)%60).toFixed(0)
         var mins = Math.floor(minSp - spireTime).toFixed(0);
