@@ -147,6 +147,9 @@ function autoMap() {
         enemyDamage = calcBadGuyDmg(null,getEnemyMaxAttack(game.global.world, 99, 'Snimp', 1.0),true,true); //(enemy,attack,daily,maxormin,[disableFlucts])
     }
     enemyHealth = getEnemyMaxHealth(game.global.world, 99);
+    if (game.global.challengeActive == "Coordinate"){
+        enemyHealth *= getBadCoordLevel();
+    }
     if(game.global.challengeActive == "Toxicity") {
         enemyHealth *= 2;
     }
