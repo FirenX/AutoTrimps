@@ -179,7 +179,7 @@ function initializeAllSettings() {
     } else {
         createSetting('CapEquip2', 'Cap Equip to', 'Do not level equipment past this number. Helps for early game when the script wants to level your tier2s to level 40+, or to stop wasting metal. Recommended value: 10, Disable with -1 or 0.', 'value', -1, null, 'Gear');
     }
-    createSetting('SuperPrestige', 'SuperPrestige', 'During Spire, Void Maps and Farming try to get extra high Prestiges using "Extra Zones".', 'boolean', false, null, "Gear");
+    createSetting('SuperPrestige', 'SuperPrestige', 'During Spire, Void Maps and Farming try to get extra high Prestiges using Extra Zones.', 'boolean', false, null, 'Gear');
 
 //AutoMaps + VoidMaps settings:
     createSetting('AutoMaps', 'Auto Maps', 'Recommended. Automatically run maps to progress. Very Important. Has multiple modes: <b>Prestige, Voids, Want more Damage, Want more Health, Want Health & Damage, and Farming.</b>Prestige takes precedence and does equal level maps until it gets what is needed as per Autotrimps Prestige dropdown setting. Voids is self explanatory: use the Void Difficulty Check setting to control the amount of farming. If \'want more damage\', it will only do 10 maps for 200% mapbonus damage bonus. If \'Farming\', it does maps beyond 10 if the displayed number is over >16x. \'Want more health[or and damage]\' is basically just a status message telling you need more health, theres not much that can be done besides tell AutoLevelEquipment to keep buying stuff. If you \'want health\' but your damage is OK to continue, invest in more HP perks.', 'boolean', true, null, "Maps");

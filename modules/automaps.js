@@ -407,13 +407,17 @@ function autoMap() {
     //Determine need for SuperPrestige
     needSuperPrestige = false;
     var nextPrestige;
-    if ((preSpireFarming && (spireTime > getPageSetting('MinutestoFarmBeforeSpire')/3) && (spireTime < getPageSetting('MinutestoFarmBeforeSpire') * (2 / 3)) && getPageSetting('SuperPrestige'))
+    var poisonHelp = (getEmpowerment() == "Poison") && (game.global.world %5 == 0) && (enemyHealth > (ourBaseDamage * 20));
+    if (getPageSetting('SuperPrestige') &&
+        ((preSpireFarming && (spireTime > getPageSetting('MinutestoFarmBeforeSpire')/3) && (spireTime < getPageSetting('MinutestoFarmBeforeSpire') * (2 / 3)))
         || (voidMapLevelSetting > 0 && game.global.world == voidMapLevelSettingZone)
-        || (shouldFarm && game.global.mapBonus >= customVars.maxMapBonus && (enemyHealth > (ourBaseDamage * customVars.farmingCutoff * 1)))) {
+        || (game.global.mapBonus >= customVars.maxMapBonus && (enemyHealth > (ourBaseDamage * customVars.farmingCutoff)))
+        || poisonHelp)) {
         prestigeList = ['Dagadder','Megamace','Polierarm','Axeidic','Greatersword','Harmbalest'];
         prestigeList.sort(function(a,b){return game.mapUnlocks[a].last - game.mapUnlocks[b].last;});
         nextPrestige = prestigeList[0];
-        var canSuperPrestige = game.mapUnlocks[nextPrestige].last + 5 <= game.global.world + customVars.SuperPrestigeMaxExtra;
+        var canSuperPrestige = game.mapUnlocks[nextPrestige].last + 5 <= game.global.world + (poisonHelp ? 8 : customVars.SuperPrestigeMaxExtra);
+        canSuperPrestige = canSuperPrestige && getEmpowerment() != "Wind";
         needSuperPrestige = needSuperPrestige || (canSuperPrestige && !needPrestige && !skippedPrestige);
     }
 
@@ -466,9 +470,13 @@ function autoMap() {
     var keysSorted = Object.keys(obj).sort(function(a, b) {
         return obj[b] - obj[a];
     });
-    //if there are no non-unique maps, there will be nothing in keysSorted, so set to create a map
+    //if there are no non-unique maps without using extra levels, there will be nothing in keysSorted, so set to create a map
     var highestMapNoExtra;
     while (keysSorted[0] && obj[keysSorted[0]] > game.global.world) {
+        //if there is a map that used extra levels and we are not superPrestiging then recycle it. We can create a better one later
+        if (!needSuperPrestige && game.global.preMapsActive && !game.global.mapsActive) {
+            recycleMap(keysSorted[0], false);
+        }
         keysSorted.shift();
     }
     if (keysSorted[0])
@@ -629,7 +637,6 @@ function autoMap() {
         if (selectedMap == "world") {
             //if needSuperPrestige, TRY to find correct level map
             if (needSuperPrestige) {
-                var theMap;
                 var prestigeLevel = game.mapUnlocks[nextPrestige].last + 5;
                 var prestigeLevelMaps = game.global.mapsOwnedArray.filter(function(map){return !map.noRecycle && map.level == prestigeLevel;});
                 var mapsSorted = prestigeLevelMaps.sort(giveMapSorter(["diff", "size", "spec", "loc", "loot"]));
@@ -704,7 +711,7 @@ function autoMap() {
                 shouldDoHealthMaps = false;
             }
             //turn repeat off on the last maxMapBonusAfterZ map.
-            if (doMaxMapBonus && game.global.mapBonus >= customVars.maxMapBonusAfterZ - 1) {
+            else if (doMaxMapBonus && game.global.mapBonus >= customVars.maxMapBonusAfterZ - 1) {
                 repeatClicked();
                 doMaxMapBonus = false;
             }
@@ -737,7 +744,7 @@ function autoMap() {
                     (game.resources.trimps.realMax() <= game.resources.trimps.owned + 1)
                     || (game.global.challengeActive == 'Lead' && game.global.lastClearedCell > 93)
                     || (doVoids && game.global.lastClearedCell > 93)
-                    )
+                    || (getEmpowerment() == "Ice" && game.global.mapBonus < customVars.maxMapBonus))
                 ){
                 //output stuck message
                 if (scryerStuck) {
@@ -757,8 +764,8 @@ function autoMap() {
         if (selectedMap == "superprestigecreate") {
               var prestigeZone = game.mapUnlocks[nextPrestige].last + 5;
               var mandatory = {"level": ((prestigeZone <= game.global.world) ? prestigeZone : game.global.world), "extra": ((prestigeZone <= game.global.world) ? "0" : (""+(prestigeZone - game.global.world)))};
-              var optional = {"size": 0, "diff": 0};
-              if (tryToCreateMap(mandatory, optional, true)) {
+              var optional = ["size", "diff"];
+              if (tryToCreateMap(mandatory, optional, {}, true)) {
             //if successful, select our new map
                   buyMap();
                   selectedMap = game.global.mapsOwnedArray[game.global.mapsOwnedArray.length - 1].id;
@@ -776,7 +783,7 @@ function autoMap() {
             mapsClicked();  //go back
         }
         else if (selectedMap == "create") {
-            document.getElementById("mapLevelInput").value = needPrestige ? game.global.world : siphlvl;
+/*            document.getElementById("mapLevelInput").value = needPrestige ? game.global.world : siphlvl;
             var decrement;  //['size','diff','loot']
             var tier;   //taken from MODULES vars at the top of this file.
             //instead of normal map locations, use Plentiful (Gardens) if the Decay challenge has been completed. (for +25% better loot)
@@ -876,10 +883,40 @@ function autoMap() {
                     document.getElementById('advPerfectCheckbox').checked = false;
                 }
             }
+*/
+            var mandatory = {};   //settings with values we require to have
+            var optional = [];   //settings we would like to be as good as possible from least to most important
+            var limit = {};   //settings with values we will not surpass
+            var tier;   //taken from MODULES vars at the top of this file.
+            //instead of normal map locations, use Plentiful (Gardens) if the Decay challenge has been completed. (for +25% better loot)
+            var useGardens = (customVars.preferGardens && game.global.decayDone);
+            if (game.global.world >= customVars.MapTierZone[0]) {
+                //Zone 72+ (old: 9/9/9 Metal):
+                tier = customVars.MapTier0Sliders;
+            } else if (game.global.world >= customVars.MapTierZone[1]) {
+                //Zone 47-72 (old: 9/9/4 Metal):
+                tier = customVars.MapTier1Sliders;
+            } else if (game.global.world >= customVars.MapTierZone[2]) {
+                //Zone 16-47 (old: 9/9/0 Random):
+                tier = customVars.MapTier2Sliders;
+            } else {
+                //Zone 6-16 (old: 9/0/0 Random):
+                tier = customVars.MapTier3Sliders;
+            }
+            mandatory["level"] = needPrestige ? game.global.world : siphlvl;
+            limit = {"size": tier[0], "diff": tier[1], "loot": tier[2]};
+            //if we are "Farming" for resources, make sure it's Plentiful OR metal (and always aim for lowest difficulty)
+            if(shouldFarm || !enoughDamage || !enoughHealth || game.global.challengeActive == 'Metal') {
+                mandatory["loc"] = useGardens ? "Plentiful" : tier[3];
+            }
+            //set up various priorities for various situations
+            if (needPrestige && !enoughDamage) optional = ["size", "diff", "spec", "loot", "perf"];
+            else if (shouldFarm) optional = ["loot", "spec", "diff", "size", "perf"];
+            else optional = ["loc", "size", "diff", "loot", "spec", "perf"];
 
         //if we can't afford the map we designed, pick our highest existing map
-            var maplvlpicked = document.getElementById("mapLevelInput").value;
-            if (updateMapCost(true) > game.resources.fragments.owned) {
+            var maplvlpicked = mandatory["level"];
+            if (!tryToCreateMap(mandatory, optional, limit)) {
                 selectMap(game.global.mapsOwnedArray[highestMapNoExtra].id);
                 debug("Can't afford the map we designed, #" + maplvlpicked , "maps", '*crying2');
                 debug("..picking our highest map:# " + game.global.mapsOwnedArray[highestMapNoExtra].id + " Level: " + game.global.mapsOwnedArray[highestMapNoExtra].level, "maps", '*happy2');
@@ -909,11 +946,12 @@ function autoMap() {
     }
 }
 
-function tryToCreateMap(mandatory, optional, prestigeous) {
+function tryToCreateMap(mandatory, optional, limit) {
+    if (limit == undefined) limit = {};
   //set everything off
     const baseSliders = {"level": game.global.world, "loot": "0", "size": "0", "diff": "0", "loc": "Random", "spec": "0", "perf": false, "extra": "0"};
     for (var setting in baseSliders) {
-        if (!setMapSlider(setting, baseSliders[setting])) return false;
+        setMapSlider(setting, baseSliders[setting]);
     }
   //set the mandatory settings
     for (var setting in mandatory) {
@@ -921,20 +959,15 @@ function tryToCreateMap(mandatory, optional, prestigeous) {
     }
   //exit if we cannot afford the mandatory settings
     if (updateMapCost(true) > game.resources.fragments.owned) return false;
-  //try prestigeous first if flag was set
-    if (prestigeous) {
-        setMapSlider("spec", "p");
-        if (updateMapCost(true) > game.resources.fragments.owned) {
-            setMapSlider("spec", "0");
-        }
-    }
-  //now optimize the optional settings in the order determined by the optional object
-    for (var setting in optional) {
+  //now optimize the optional settings in the order determined by the optional array
+    for (var index in optional) {
+        var setting = optional[index];
         var affordValue = getMapSlider(setting);
         var nextValue = affordValue;
         while ((nextValue = getNextSliderValue(setting, affordValue))
               && (setMapSlider(setting, nextValue))
-              && (updateMapCost(true) > game.resources.fragments.owned)) {
+              && (!limit[setting] || nextValue <= limit[setting])
+              && (updateMapCost(true) < game.resources.fragments.owned)) {
                 affordValue = nextValue;
         }
         setMapSlider(setting, affordValue);
@@ -945,6 +978,8 @@ function tryToCreateMap(mandatory, optional, prestigeous) {
 
 function getNextSliderValue(setting, value) {
     if (setting == undefined || value == undefined) return undefined;
+    //exception for needPrestige and needSuperPrestige cases
+    if ((needPrestige || needSuperPrestige) && setting == "spec" && value == "fa") return "p";
     const valueList = {"level": [], "loot": ["0","1","2","3","4","5","6","7","8","9"],
                         "size": ["0","1","2","3","4","5","6","7","8","9"],
                         "diff": ["0","1","2","3","4","5","6","7","8","9"],
@@ -963,7 +998,7 @@ function setMapSlider(setting, value){
     const isUnlocked = {"level": game.global.highestLevelCleared >= 59, "loot": true, "size": true, "diff": true,
                         "loc": (value == "Plentiful" ? game.global.decayDone : true),
                         "spec": (mapSpecialModifierConfig[value] ? ((mapSpecialModifierConfig[value].unlocksAt - 1) <= game.global.highestLevelCleared) : true),
-                        "perf": 109 <= game.global.highestLevelCleared, "extra": 210 <= game.global.highestLevelCleared};
+                        "perf": (109 <= game.global.highestLevelCleared) && checkSlidersForPerfect(), "extra": 210 <= game.global.highestLevelCleared};
     if (!isUnlocked[setting]) return false;
     switch (setting){
         case "level":
@@ -1023,7 +1058,7 @@ function getMapSlider(setting){
             value = document.getElementById('advExtraLevelSelect').value;
             break;
     }
-    return value;
+    return value + "";
 }
 
 bonus: "fa"
