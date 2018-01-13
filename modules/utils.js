@@ -300,3 +300,11 @@ function formatMinutesForDescriptions(number){
     }
     return text;
 }
+
+function saveModuleParams() {
+
+}
+
+function loadModuleParams() {
+
+}
